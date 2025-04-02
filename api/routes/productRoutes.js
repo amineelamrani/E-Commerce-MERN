@@ -8,6 +8,11 @@ const router = express.Router();
 router.get("/", productController.viewProducts);
 router.get("/:productID", productController.getProduct);
 
+// Protected routes
+router.use(authController.protect);
+
+router.post("/:productID/reviews", productController.addReview);
+
 // Admin restricted routes
 router.use(authController.adminRestricted);
 

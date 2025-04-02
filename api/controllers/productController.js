@@ -1,3 +1,4 @@
+const Review = require("../models/reviewModel");
 const Product = require("./../models/productModel");
 const catchAsync = require("./../utils/catchAsync");
 
@@ -71,4 +72,43 @@ exports.getProduct = catchAsync(async (req, res, next) => {
     status: "success",
     result: product,
   });
+});
+
+exports.addReview = catchAsync(async (req, res, next) => {
+  const { productID } = req.params;
+
+  const { content, rating, productSize } = req.body;
+
+  const newReview = await Review.create({
+    owner: req.userId,
+    content,
+    rating,
+    productSize,
+    product: productID,
+  });
+  if (!newReview) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Cannot create the review given!",
+    });
+  }
+  const product = await Product.findById(productID);
+  product.reviewsNumber++;
+  if (product.reviewsNumber === 1) {
+    product.reviewsMedian = rating;
+  } else {
+    product.reviewsMedian = (product.reviewsMedian + rating) / 2;
+  }
+
+  await product.save();
+
+  res.status(202).json({
+    status: "success",
+    result: {
+      product: product,
+      review: newReview,
+    },
+  });
+
+  // update the product review part (like reviews median + review number)
 });
