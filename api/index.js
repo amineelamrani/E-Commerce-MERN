@@ -6,6 +6,7 @@ const path = require("path");
 require("dotenv").config();
 
 const userRouter = require("./routes/userRoutes");
+const productRouter = require("./routes/productRoutes");
 
 // Start express App
 const app = express();
@@ -27,6 +28,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/products", productRouter);
 
 // Start Server
 const port = process.env.PORT;

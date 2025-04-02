@@ -13,6 +13,9 @@ router.post("/forgetPassword", authController.forgetPassword);
 router.post("/resetPassword/:email/:token", authController.resetPassword);
 
 // To protect routes
-// router.use(authController.protect);
+router.use(authController.protect);
+
+// Admin restricted routes
+router.use(authController.adminRestricted);
 
 module.exports = router;
