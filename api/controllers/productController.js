@@ -109,6 +109,23 @@ exports.addReview = catchAsync(async (req, res, next) => {
       review: newReview,
     },
   });
+});
 
-  // update the product review part (like reviews median + review number)
+exports.getReviews = catchAsync(async (req, res, next) => {
+  const { productID } = req.params;
+  const reviews = await Review.find({ product: productID }).populate(
+    "owner",
+    "name"
+  );
+  if (!reviews) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Cannot see the reviews of the product!",
+    });
+  }
+
+  res.status(202).json({
+    status: "success",
+    result: reviews,
+  });
 });

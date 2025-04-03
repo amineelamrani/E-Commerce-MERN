@@ -27,7 +27,10 @@ const orderSchema = new mongoose.Schema(
       status: String,
       infos: String,
     },
-    statusDelivery: String,
+    statusDelivery: {
+      type: String,
+      default: "Order Placed",
+    },
   },
   { timestamps: true }
 );

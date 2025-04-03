@@ -7,6 +7,7 @@ const router = express.Router();
 // Open routes
 router.get("/", productController.viewProducts);
 router.get("/:productID", productController.getProduct);
+router.get("/:productID/reviews", productController.getReviews);
 
 // Protected routes
 router.use(authController.protect);
