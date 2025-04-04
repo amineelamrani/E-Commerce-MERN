@@ -1,10 +1,33 @@
-import { Button } from "@/components/ui/button";
+import { BrowserRouter, Routes, Route } from "react-router";
+import Home from "./pages/Home";
+import Header from "./components/Header";
+import Product from "./pages/Product";
+import Orders from "./pages/Orders";
+import Contact from "./pages/Contact";
+import Collection from "./pages/Collection";
+import Cart from "./pages/Cart";
+import About from "./pages/About";
+import SignUp from "./pages/auth/SignUp";
+import LogIn from "./pages/auth/LogIn";
 
 function App() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-svh">
-      <Button>Click me</Button>
-    </div>
+    <BrowserRouter>
+      <div className="container mx-auto py-2 font-mono">
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/product/:productID" element={<Product />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/collection" element={<Collection />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/login" element={<LogIn />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
