@@ -8,7 +8,7 @@ export default function Header() {
   let location = useLocation();
 
   return (
-    <div className="w-full flex justify-between items-center py-3">
+    <div className="w-full flex justify-between items-center py-3 border-b-[1px]">
       <h1>
         <Link to="/">FOREVER.</Link>
       </h1>
@@ -53,7 +53,11 @@ export default function Header() {
             CONTACT
           </Button>
         </Link>
-        <Link to="/">AdminPanel</Link>
+        <Link to="/admin">
+          <Button variant="outline" className="px-5 rounded-full">
+            AdminPanel
+          </Button>
+        </Link>
       </div>
 
       <div className="flex gap-2">
