@@ -3,6 +3,17 @@ import cartIcon from "../assets/icons/cart-icon.svg";
 import { Button } from "@/components/ui/buttonHeader";
 import { UserRound, Search } from "lucide-react";
 
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from "@/components/ui/navigation-menu";
+
 export default function Header() {
   let location = useLocation();
 
@@ -59,17 +70,35 @@ export default function Header() {
         </Link>
       </div>
 
-      <div className="flex gap-2 items-center">
-        {/* <img src={searchIcon} className="h-6 w-6" alt="" /> */}
-        <Search className="h-6 w-6" />
-        {/* <img src={profileIcon} className="h-6 w-6" alt="" /> */}
-        <UserRound className="h-6 w-6" />
-        <div className="relative">
-          <p className="absolute flex items-center justify-center rounded-full bg-black text-white text-[10px] w-3 h-3 bottom-0 right-0">
-            0
-          </p>
-          <img src={cartIcon} className="h-6 w-6" alt="" />
-        </div>
+      <div className="flex items-center">
+        <Link to="/collection">
+          <Search className="h-6 w-6" />
+        </Link>
+
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>
+                <UserRound className="h-6 w-6" />
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <NavigationMenuLink>
+                  <Link to="/orders">Orders</Link>
+                </NavigationMenuLink>
+                <NavigationMenuLink>Logout</NavigationMenuLink>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+
+        <Link to="/cart">
+          <div className="relative">
+            <p className="absolute flex items-center justify-center rounded-full bg-black text-white text-[10px] w-3 h-3 bottom-0 right-0">
+              0
+            </p>
+            <img src={cartIcon} className="h-6 w-6" alt="" />
+          </div>
+        </Link>
       </div>
     </div>
   );

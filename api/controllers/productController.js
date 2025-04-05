@@ -129,3 +129,28 @@ exports.getReviews = catchAsync(async (req, res, next) => {
     result: reviews,
   });
 });
+
+exports.getLatest10Products = catchAsync(async (req, res, next) => {
+  // get 10 latest added products
+  const products = await Product.find({})
+    .sort({ createdAt: -1 })
+    .limit(10)
+    .exec();
+  res.status(202).json({
+    status: "success",
+    result: products,
+  });
+});
+
+exports.getBest5SellersProducts = catchAsync(async (req, res, next) => {
+  // get 5 Best sellers product
+  const products = await Product.find({})
+    .sort({ ordersNumber: -1 })
+    .limit(5)
+    .exec();
+
+  res.status(202).json({
+    status: "success",
+    result: products,
+  });
+});
