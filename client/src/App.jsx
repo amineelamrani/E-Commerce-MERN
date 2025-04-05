@@ -9,11 +9,12 @@ import Cart from "./pages/Cart";
 import About from "./pages/About";
 import SignUp from "./pages/auth/SignUp";
 import LogIn from "./pages/auth/LogIn";
+import Footer01Page from "./components/Footer";
 
 function App() {
   return (
     <BrowserRouter>
-      <div className="container mx-auto py-2 font-mono">
+      <div className="container mx-auto px-5 py-2 font-mono">
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -26,6 +27,7 @@ function App() {
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/login" element={<LogIn />} />
         </Routes>
+        <Footer01Page />
       </div>
     </BrowserRouter>
   );

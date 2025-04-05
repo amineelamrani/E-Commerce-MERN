@@ -1,8 +1,7 @@
 import { Link, useLocation } from "react-router";
 import cartIcon from "../assets/icons/cart-icon.svg";
-import profileIcon from "../assets/icons/profile-icon.svg";
-import searchIcon from "../assets/icons/search-icon.svg";
 import { Button } from "@/components/ui/buttonHeader";
+import { UserRound, Search } from "lucide-react";
 
 export default function Header() {
   let location = useLocation();
@@ -12,7 +11,7 @@ export default function Header() {
       <h1>
         <Link to="/">FOREVER.</Link>
       </h1>
-      <div className="flex items-center justify-between gap-5">
+      <div className="hidden md:flex items-center justify-between gap-5">
         <Link to="/">
           <Button
             className={`${
@@ -60,10 +59,17 @@ export default function Header() {
         </Link>
       </div>
 
-      <div className="flex gap-2">
-        <img src={searchIcon} className="h-5 w-5" alt="" />
-        <img src={profileIcon} className="h-5 w-5" alt="" />
-        <img src={cartIcon} className="h-5 w-5" alt="" />
+      <div className="flex gap-2 items-center">
+        {/* <img src={searchIcon} className="h-6 w-6" alt="" /> */}
+        <Search className="h-6 w-6" />
+        {/* <img src={profileIcon} className="h-6 w-6" alt="" /> */}
+        <UserRound className="h-6 w-6" />
+        <div className="relative">
+          <p className="absolute flex items-center justify-center rounded-full bg-black text-white text-[10px] w-3 h-3 bottom-0 right-0">
+            0
+          </p>
+          <img src={cartIcon} className="h-6 w-6" alt="" />
+        </div>
       </div>
     </div>
   );
