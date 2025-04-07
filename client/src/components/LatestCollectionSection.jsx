@@ -1,6 +1,7 @@
 import CollectionItemCard from "./CollectionItemCard";
+import LoadingSpinner from "./ui/LoadingSpinner";
 
-export default function LatestCollectionSection() {
+export default function LatestCollectionSection({ data }) {
   return (
     <div className="w-full flex flex-col gap-5 items-center">
       <h1 className="relative text-2xl font-bold after:content-[''] after:absolute after:top-1/2 after:w-14 after:h-[2px] after:bg-black">
@@ -10,11 +11,19 @@ export default function LatestCollectionSection() {
         Lorem Ipsum is simply dummy text of the printing and typesetting
         industry. Lorem Ipsum has been the.
       </p>
-      <div className="w-full flex flex-wrap">
-        {Array.from({ length: 10 }).map((_, index) => (
-          <CollectionItemCard title={"HEllo"} price={45} key={index} />
-        ))}
-      </div>
+      {data !== null && (
+        <div className="w-full flex flex-wrap">
+          {data.map((product, index) => (
+            <CollectionItemCard
+              title={product.title}
+              price={product.price}
+              image={product.images[0]}
+              key={index}
+            />
+          ))}
+        </div>
+      )}
+      {data === null && <LoadingSpinner />}
     </div>
   );
 }

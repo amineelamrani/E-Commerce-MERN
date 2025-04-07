@@ -4,20 +4,60 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BadgeCheck, Headset, RefreshCcwDot } from "lucide-react";
 import HighlightItem from "@/components/HighlightItem";
 import SubscribeSection from "@/components/SubscribeSection";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 
 export default function Home() {
   const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
+  const [fetchedLatest, setFetchedLatest] = useState(null);
+  const [fetchedBestSeller, setFetchedBestSeller] = useState(null);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async (apiRoute, setData, index) => {
+      try {
+        const res = await fetch(apiRoute, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await res.json();
+        if (data && data.status === "success") {
+          // setFetchedLatest(data.result);
+          setData(data.result);
+        } else {
+          setError(true);
+        }
+      } catch (err) {
+        setError(true);
+      }
+    };
+
+    fetchData("/api/v1/products/latest", setFetchedLatest);
+    fetchData("/api/v1/products/bestseller", setFetchedBestSeller);
+  }, []);
+
+  if (error) {
+    toast.error("An error has occured! Please refresh the page", {
+      duration: 3000,
+    });
+  }
 
   return (
     <div className="w-full h-full flex flex-col gap-14">
+      <Toaster
+        position="top-right"
+        expand={true}
+        richColors
+        visibleToasts={1}
+      />
       <Carousel
         plugins={[plugin.current]}
         className="w-full max-h-3/4 min-h-96 relative border"
@@ -34,11 +74,9 @@ export default function Home() {
             </CarouselItem>
           ))}
         </CarouselContent>
-        {/* <CarouselPrevious /> */}
-        {/* <CarouselNext /> */}
       </Carousel>
-      <LatestCollectionSection />
-      <BestSellersSection />
+      <LatestCollectionSection data={fetchedLatest} />
+      <BestSellersSection data={fetchedBestSeller} />
 
       <div className="flex flex-wrap justify-between items-center w-full">
         <HighlightItem
