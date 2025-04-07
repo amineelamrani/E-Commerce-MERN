@@ -51,30 +51,49 @@ export default function Home() {
   }
 
   return (
-    <div className="w-full h-full flex flex-col gap-14">
+    <div className="w-full h-full flex items-center flex-col gap-14">
       <Toaster
         position="top-right"
         expand={true}
         richColors
         visibleToasts={1}
       />
-      <Carousel
-        plugins={[plugin.current]}
-        className="w-full max-h-3/4 min-h-96 relative border"
-        onMouseEnter={plugin.current.stop}
-        onMouseLeave={plugin.current.reset}
-      >
-        <CarouselContent className="h-full">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <CarouselItem
-              key={index}
-              className="h-full min-h-96 flex w-full items-center justify-center"
-            >
-              <div className="p-1 h-full">{index + 1}</div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-      </Carousel>
+      {fetchedBestSeller !== null && (
+        <Carousel
+          plugins={[plugin.current]}
+          className="w-full md:w-3/4 max-h-3/4 relative border"
+          onMouseEnter={plugin.current.stop}
+          onMouseLeave={plugin.current.reset}
+        >
+          <CarouselContent className="h-full w-full">
+            {fetchedBestSeller.map((product, index) => (
+              <CarouselItem
+                key={index}
+                className="h-full flex flex-col md:flex-row w-full items-center justify-between"
+              >
+                <div className="w-full md:w-3/5 h-96 md:h-full flex flex-col items-center justify-center text-center py-5 px-2 md:py-1 md:px-1">
+                  <h1 className="italic font-bold text-center">
+                    OUR BESTSELLERS
+                  </h1>
+                  <h1 className="text-2xl text-wrap font-bold py-5 text-center">
+                    {product.title}
+                  </h1>
+                  <h1 className="text-sm italic font-serif">
+                    Swip Left or right &lt;-&gt;
+                  </h1>
+                </div>
+                <div className="h-full w-full md:w-2/5">
+                  <img
+                    src={product.images[0]}
+                    alt=""
+                    className="w-full h-full"
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      )}
       <LatestCollectionSection data={fetchedLatest} />
       <BestSellersSection data={fetchedBestSeller} />
 
