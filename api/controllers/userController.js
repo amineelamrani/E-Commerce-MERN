@@ -41,3 +41,13 @@ exports.viewOrder = catchAsync(async (req, res, next) => {
     result: order,
   });
 });
+
+exports.getAuthenticatedUser = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.userId).select(
+    "-password -uniqueString -confirmPassword"
+  );
+  res.status(202).json({
+    status: "success",
+    result: user,
+  });
+});

@@ -10,6 +10,7 @@ import About from "./pages/About";
 import SignUp from "./pages/auth/SignUp";
 import LogIn from "./pages/auth/LogIn";
 import Footer01Page from "./components/Footer";
+import AccountVerification from "./pages/auth/AccountVerification";
 
 function App() {
   return (
@@ -26,6 +27,10 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/login" element={<LogIn />} />
+          <Route
+            path="/verify-account/:mail"
+            element={<AccountVerification />}
+          />
         </Routes>
         <Footer01Page />
       </div>
