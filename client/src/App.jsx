@@ -11,8 +11,14 @@ import SignUp from "./pages/auth/SignUp";
 import LogIn from "./pages/auth/LogIn";
 import Footer01Page from "./components/Footer";
 import AccountVerification from "./pages/auth/AccountVerification";
+import { useEffect } from "react";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
 
 function App() {
+  useEffect(() => {
+    // Got informations about the current user and store them in a contextAPI so that it can be accessibele by all other components especially when ordering (so no need to use redux here)
+  }, []);
   return (
     <BrowserRouter>
       <div className="container mx-auto px-5 py-2 font-mono">
@@ -31,6 +37,8 @@ function App() {
             path="/verify-account/:mail"
             element={<AccountVerification />}
           />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:mail" element={<ResetPassword />} />
         </Routes>
         <Footer01Page />
       </div>

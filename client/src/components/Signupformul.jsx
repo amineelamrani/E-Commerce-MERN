@@ -1,12 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link, useNavigate } from "react-router";
@@ -84,7 +78,7 @@ export function Signupformul({ className, ...props }) {
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                   <p className="ml-auto inline-block text-sm underline-offset-4 hover:underline">
-                    <Link to="/">Forgot your password?</Link>
+                    <Link to="/forgot-password">Forgot your password?</Link>
                   </p>
                 </div>
                 <Input
