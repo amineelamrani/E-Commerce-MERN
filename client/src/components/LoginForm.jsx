@@ -8,6 +8,8 @@ import { useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import LoadingSpinner from "./ui/LoadingSpinner";
+import UserContext from "@/context/UserContext";
+import React, { useContext } from "react";
 
 export function LoginForm({ className, ...props }) {
   const [inputData, setInputData] = useState({
@@ -16,6 +18,7 @@ export function LoginForm({ className, ...props }) {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const { setNewLogin } = useContext(UserContext);
   let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -38,6 +41,7 @@ export function LoginForm({ className, ...props }) {
     if (data && data.status === "success") {
       setLoading(false);
       setError(false);
+      setNewLogin((val) => !val);
       // redirect to /verify-account route to verify the account creation
       navigate(`/orders`);
     } else {

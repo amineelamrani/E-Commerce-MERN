@@ -46,6 +46,12 @@ exports.getAuthenticatedUser = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.userId).select(
     "-password -uniqueString -confirmPassword"
   );
+  if (user && user.length === 0) {
+    return res.status(400).json({
+      status: "fail",
+      result: user,
+    });
+  }
   res.status(202).json({
     status: "success",
     result: user,
