@@ -85,6 +85,7 @@ export default function Collection() {
                 price={product.price}
                 image={product.images[0]}
                 key={index}
+                id={product._id}
               />
             );
           } else if (!Topwear && !Bottomwear && !Winterwear) {

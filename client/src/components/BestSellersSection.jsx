@@ -19,6 +19,7 @@ export default function BestSellersSection({ data }) {
               price={product.price}
               image={product.images[0]}
               key={index}
+              id={product._id}
             />
           ))}
         </div>
