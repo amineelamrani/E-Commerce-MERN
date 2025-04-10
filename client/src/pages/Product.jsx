@@ -3,10 +3,14 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ReviewComponent from "@/components/ReviewComponent";
+import RelatedProductsSection from "@/components/RelatedProductsSection";
 
 export default function Product() {
   let { productID } = useParams();
   const [fetchedProduct, setFetchedProduct] = useState(null);
+  const [fetchedReviews, setFetchedReviews] = useState(null);
   const [highlightedImage, setHighlightedImage] = useState(null);
 
   useEffect(() => {
@@ -25,6 +29,23 @@ export default function Product() {
     };
 
     fetchProductData();
+  }, [productID]);
+
+  useEffect(() => {
+    const fetchReviewsData = async () => {
+      const res = await fetch(`/api/v1/products/${productID}/reviews`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (data && data.status === "success") {
+        setFetchedReviews(data.result);
+      }
+    };
+
+    fetchReviewsData();
   }, []);
 
   const handleImageClick = (e) => {
@@ -34,23 +55,23 @@ export default function Product() {
   return (
     <div className="">
       {fetchedProduct !== null && (
-        <div>
-          <div className="py-14 flex flex-row w-full items-start gap-10">
-            <div className="w-1/2 flex flex-row items-start gap-2">
-              <div className="flex flex-col gap-1">
+        <div className="w-full">
+          <div className="py-14 flex flex-row w-full justify-around items-start gap-10 mx-auto">
+            <div className="w-1/3 flex flex-col md:flex-row items-start justify-end gap-2">
+              <div className="flex flex-col gap-1  min-w-20">
                 {fetchedProduct.images.map((image, index) => (
                   <img
                     src={image}
-                    className="w-24 hover:cursor-pointer"
+                    className="w-20 hover:cursor-pointer"
                     alt=""
                     key={index}
                     onClick={handleImageClick}
                   />
                 ))}
               </div>
-              <img src={highlightedImage} alt="" />
+              <img src={highlightedImage} className="min-w-96" alt="" />
             </div>
-            <div className="w-1/2 flex flex-col gap-3">
+            <div className="w-2/3 flex flex-col gap-3">
               <h1 className="text-3xl font-bold">{fetchedProduct.title}</h1>
               <div className="flex items-center gap-2 text-sm">
                 <FiveStartFeedback rating={fetchedProduct.reviewsMedian} />
@@ -68,7 +89,7 @@ export default function Product() {
                   {fetchedProduct.sizes.map((size, index) => (
                     <ToggleGroupItem
                       value={size}
-                      className="bg-slate-200 rounded-sm py-2"
+                      className="bg-slate-200 rounded-sm py-2 hover:cursor-pointer"
                       aria-label="Toggle bold"
                       key={index}
                     >
@@ -85,16 +106,48 @@ export default function Product() {
               </div>
             </div>
           </div>
-          <div>
-            <h2>
-              Make here as Tabs one for the description + the other for the
-              reviews
-            </h2>
-            <h2>
-              And then see how to add the related products (choose in front end
-              or backend)
-            </h2>
-          </div>
+          <Tabs defaultValue="description" className="w-full">
+            <TabsList className="border">
+              <TabsTrigger value="description">Description</TabsTrigger>
+              <TabsTrigger value="reviews">
+                Reviews ({fetchedProduct.reviewsNumber})
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="description" className="border p-3">
+              An e-commerce website is an online platform that facilitates the
+              buying and selling of products or services over the internet. It
+              serves as a virtual marketplace where businesses and individuals
+              can showcase their products, interact with customers, and conduct
+              transactions without the need for a physical presence. E-commerce
+              websites have gained immense popularity due to their convenience,
+              accessibility, and the global reach they offer.
+              <br />
+              E-commerce websites typically display products or services along
+              with detailed descriptions, images, prices, and any available
+              variations (e.g., sizes, colors). Each product usually has its own
+              dedicated page with relevant information.
+            </TabsContent>
+            <TabsContent
+              value="reviews"
+              className="border p-3 flex flex-col gap-3"
+            >
+              {fetchedReviews !== null &&
+                fetchedReviews.length > 0 &&
+                fetchedReviews.map((item, index) => (
+                  <ReviewComponent
+                    title={fetchedProduct.title}
+                    review={item}
+                    key={index}
+                  />
+                ))}
+              {fetchedReviews === null ||
+                (fetchedReviews.length === 0 && <p>No review yet added</p>)}
+            </TabsContent>
+          </Tabs>
+          <RelatedProductsSection
+            category={fetchedProduct.category[0]}
+            subCategory={fetchedProduct.subCategory[0]}
+          />
         </div>
       )}
     </div>

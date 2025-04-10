@@ -10,11 +10,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEffect, useState } from "react";
+import UserContext from "@/context/UserContext";
+import { useContext, useEffect, useState } from "react";
 
 export default function Collection() {
   const [sorting, setSorting] = useState("relevant");
-  const [fetchedProducts, setFetchedProducts] = useState(null);
+  const { fetchedProducts } = useContext(UserContext);
+
   const [categories, setCategories] = useState({
     Men: true,
     Women: true,
@@ -29,22 +31,6 @@ export default function Collection() {
   let searchCardsContent = (
     <LoadingSpinner className="my-5 h-14 w-14 mx-auto" />
   );
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const res = await fetch("/api/v1/products/", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await res.json();
-      if (data !== null && data.status === "success") {
-        setFetchedProducts(data.result);
-      }
-    };
-    fetchProducts();
-  }, []);
 
   function sortByPriceLowToHigh(items) {
     items.sort((a, b) => a.price - b.price);
