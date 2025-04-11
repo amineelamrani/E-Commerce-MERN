@@ -74,6 +74,7 @@ export default function Product() {
       if (storedItems === undefined) {
         localStorage.eCommerceForever = JSON.stringify([
           {
+            id: fetchedProduct._id,
             title: fetchedProduct.title,
             size: size,
             image: fetchedProduct.images[0],
@@ -93,6 +94,7 @@ export default function Product() {
             quant++;
 
             storedArrays[i] = {
+              id: fetchedProduct._id,
               title: fetchedProduct.title,
               size: size,
               image: fetchedProduct.images[0],
@@ -113,6 +115,7 @@ export default function Product() {
         // }
 
         storedArrays.push({
+          id: fetchedProduct._id,
           title: fetchedProduct.title,
           size: size,
           image: fetchedProduct.images[0],
@@ -136,7 +139,7 @@ export default function Product() {
       {fetchedProduct !== null && (
         <div className="w-full">
           <div className="py-14 flex flex-row w-full justify-around items-start gap-10 mx-auto">
-            <div className="w-1/3 flex flex-col md:flex-row items-start justify-end gap-2">
+            <div className="w-1/2 flex flex-col md:flex-row items-start justify-end gap-2">
               <div className="flex flex-col gap-1  min-w-20">
                 {fetchedProduct.images.map((image, index) => (
                   <img
@@ -150,7 +153,7 @@ export default function Product() {
               </div>
               <img src={highlightedImage} className="" alt="" />
             </div>
-            <div className="w-2/3 flex flex-col gap-3">
+            <div className="w-1/2 flex flex-col gap-3">
               <h1 className="text-3xl font-bold">{fetchedProduct.title}</h1>
               <div className="flex items-center gap-2 text-sm">
                 <FiveStartFeedback rating={fetchedProduct.reviewsMedian} />
