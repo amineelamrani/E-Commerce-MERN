@@ -85,6 +85,7 @@ export default function Collection() {
                   title={product.title}
                   price={product.price}
                   image={product.images[0]}
+                  id={product._id}
                   key={index}
                 />
               );

@@ -9,6 +9,7 @@ export function UserProvider({ children }) {
   const [fetchedBestSeller, setFetchedBestSeller] = useState(null);
   const [fetchedProducts, setFetchedProducts] = useState(null); // Collection data : all products
   const [error, setError] = useState(false);
+  const [basket, setBasket] = useState(false);
 
   useEffect(() => {
     // Here fetch for the current user
@@ -88,6 +89,8 @@ export function UserProvider({ children }) {
         error,
         fetchedProducts,
         setFetchedProducts,
+        basket,
+        setBasket,
       }}
     >
       {children}

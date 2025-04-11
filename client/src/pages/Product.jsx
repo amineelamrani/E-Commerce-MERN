@@ -1,17 +1,22 @@
 import FiveStartFeedback from "@/components/FiveStartFeedback";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ReviewComponent from "@/components/ReviewComponent";
 import RelatedProductsSection from "@/components/RelatedProductsSection";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
+import UserContext from "@/context/UserContext";
 
 export default function Product() {
   let { productID } = useParams();
   const [fetchedProduct, setFetchedProduct] = useState(null);
   const [fetchedReviews, setFetchedReviews] = useState(null);
   const [highlightedImage, setHighlightedImage] = useState(null);
+  const [size, setSize] = useState("");
+  const { setBasket } = useContext(UserContext);
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -29,6 +34,10 @@ export default function Product() {
     };
 
     fetchProductData();
+  }, [productID]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
   }, [productID]);
 
   useEffect(() => {
@@ -52,8 +61,78 @@ export default function Product() {
     setHighlightedImage(e.target.currentSrc);
   };
 
+  const handleAddCart = () => {
+    if (size.length === 0) {
+      toast.error("Please choose the size", {
+        duration: 3000,
+      });
+    } else {
+      toast.success("Product added to the basket", {
+        duration: 1500,
+      });
+      const storedItems = localStorage.eCommerceForever;
+      if (storedItems === undefined) {
+        localStorage.eCommerceForever = JSON.stringify([
+          {
+            title: fetchedProduct.title,
+            size: size,
+            image: fetchedProduct.images[0],
+            price: fetchedProduct.price,
+            quantity: 1,
+          },
+        ]);
+      } else {
+        const storedArrays = JSON.parse(storedItems);
+
+        for (let i = 0; i < storedArrays.length; i++) {
+          if (
+            storedArrays[i].title === fetchedProduct.title &&
+            storedArrays[i].size === size
+          ) {
+            let quant = storedArrays[i].quantity;
+            quant++;
+
+            storedArrays[i] = {
+              title: fetchedProduct.title,
+              size: size,
+              image: fetchedProduct.images[0],
+              price: fetchedProduct.price,
+              quantity: quant,
+            };
+            localStorage.eCommerceForever = JSON.stringify(storedArrays);
+            setBasket((basket) => !basket);
+            return;
+          }
+        }
+
+        // if (storedArrays.some((item) => item.title === fetchedProduct.title)) {
+        //   if (storedArrays.some((item) => item.size === size)) {
+        //     storedArrays[index].quantity++;
+        //     return;
+        //   }
+        // }
+
+        storedArrays.push({
+          title: fetchedProduct.title,
+          size: size,
+          image: fetchedProduct.images[0],
+          price: fetchedProduct.price,
+          quantity: 1,
+        });
+        localStorage.eCommerceForever = JSON.stringify(storedArrays);
+      }
+      setBasket((basket) => !basket);
+    }
+  };
+
   return (
     <div className="">
+      <Toaster
+        position="top-right"
+        expand={true}
+        richColors
+        visibleToasts={1}
+      />
       {fetchedProduct !== null && (
         <div className="w-full">
           <div className="py-14 flex flex-row w-full justify-around items-start gap-10 mx-auto">
@@ -69,7 +148,7 @@ export default function Product() {
                   />
                 ))}
               </div>
-              <img src={highlightedImage} className="min-w-96" alt="" />
+              <img src={highlightedImage} className="" alt="" />
             </div>
             <div className="w-2/3 flex flex-col gap-3">
               <h1 className="text-3xl font-bold">{fetchedProduct.title}</h1>
@@ -84,7 +163,7 @@ export default function Product() {
                 <ToggleGroup
                   type="single"
                   className="gap-2 rounded-none"
-                  onValueChange={(e) => console.log(e)}
+                  onValueChange={(e) => setSize(e)}
                 >
                   {fetchedProduct.sizes.map((size, index) => (
                     <ToggleGroupItem
@@ -98,7 +177,16 @@ export default function Product() {
                   ))}
                 </ToggleGroup>
               </div>
-              <Button className="w-38">ADD TO CART</Button>
+              <div className="flex gap-2">
+                <Button className="w-38" onClick={handleAddCart}>
+                  ADD TO CART
+                </Button>
+                <Button className="w-38" variant="secondary">
+                  ADD A REVIEW
+                </Button>
+                {/* (only verified Purchaser) */}
+              </div>
+
               <div className="w-full border-t py-5 text-xs font-mono text-slate-500 flex flex-col gap-1">
                 <p>100% Original product.</p>
                 <p>Cash on delivery is available on this product.</p>

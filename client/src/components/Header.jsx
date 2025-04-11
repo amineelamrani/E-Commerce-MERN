@@ -13,9 +13,21 @@ import {
   NavigationMenuTrigger,
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
+import { useContext } from "react";
+import UserContext from "@/context/UserContext";
 
 export default function Header() {
   let location = useLocation();
+  const { basket, setBasket } = useContext(UserContext);
+
+  const calculateOrdersNumber = () => {
+    const arr = JSON.parse(localStorage.eCommerceForever);
+    let counter = 0;
+    for (let i = 0; i < arr.length; i++) {
+      counter += arr[i].quantity;
+    }
+    return counter;
+  };
 
   return (
     <div className="w-full flex justify-between items-center py-3 border-b-[1px]">
@@ -94,7 +106,9 @@ export default function Header() {
         <Link to="/cart">
           <div className="relative">
             <p className="absolute flex items-center justify-center rounded-full bg-black text-white text-[10px] w-3 h-3 bottom-0 right-0">
-              0
+              {localStorage.eCommerceForever === undefined
+                ? `0`
+                : `${calculateOrdersNumber()}`}
             </p>
             <img src={cartIcon} className="h-6 w-6" alt="" />
           </div>
