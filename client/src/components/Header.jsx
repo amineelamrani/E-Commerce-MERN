@@ -104,8 +104,8 @@ export default function Header() {
         </NavigationMenu>
 
         <Link to="/cart">
-          <div className="relative">
-            <p className="absolute flex items-center justify-center rounded-full bg-black text-white text-[10px] w-3 h-3 bottom-0 right-0">
+          <div className="relative flex items-center justify-center">
+            <p className="absolute flex items-center justify-center rounded-full bg-black text-white text-center text-[6px] w-3 h-3 bottom-0 right-0">
               {localStorage.eCommerceForever === undefined
                 ? `0`
                 : `${calculateOrdersNumber()}`}
