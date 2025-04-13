@@ -88,7 +88,8 @@ export default function Product() {
         for (let i = 0; i < storedArrays.length; i++) {
           if (
             storedArrays[i].title === fetchedProduct.title &&
-            storedArrays[i].size === size
+            storedArrays[i].size === size &&
+            storedArrays[i].id === fetchedProduct._id
           ) {
             let quant = storedArrays[i].quantity;
             quant++;
