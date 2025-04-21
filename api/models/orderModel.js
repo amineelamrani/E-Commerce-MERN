@@ -26,6 +26,7 @@ const orderSchema = new mongoose.Schema(
       method: String,
       status: String,
       infos: String,
+      stripeProductId: String,
     },
     statusDelivery: {
       type: String,
