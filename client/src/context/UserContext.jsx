@@ -78,6 +78,9 @@ export function UserProvider({ children }) {
     };
     fetchProducts();
   }, []);
+  useEffect(() => {
+    setProductsToBuy(JSON.parse(localStorage.eCommerceForever));
+  }, []);
 
   return (
     <UserContext.Provider

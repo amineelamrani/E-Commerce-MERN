@@ -21,17 +21,20 @@ const orderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    deliverInformation: {
+    deliveryInformation: {
       firstName: String,
       lastName: String,
       email: String,
-      adress: String,
+      street: String,
+      city: String,
+      state: String,
+      zipCode: String,
+      country: String,
       phone: String,
     },
     payment: {
       method: String,
       status: String,
-      infos: String,
     },
     statusDelivery: {
       type: String,

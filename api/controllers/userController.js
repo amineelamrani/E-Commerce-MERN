@@ -1,4 +1,5 @@
 const Order = require("../models/orderModel");
+const Product = require("../models/productModel");
 const User = require("./../models/userModel");
 const catchAsync = require("./../utils/catchAsync");
 const stripe = require("stripe")(process.env.STRIPE_TEST);
@@ -73,27 +74,53 @@ exports.orderProduct = catchAsync(async (req, res, next) => {
       result: { deliveryInformation, productsToBuy, paymentMethod },
     });
   }
+});
 
-  /*const { productID } = req.params;
-  const owner = req.userId;
-  const { productSize, quantity, deliverInformation, payment } = req.body;
-  const newOrder = await Order.create({
-    product: productID,
-    productSize,
-    quantity,
-    owner,
-    deliverInformation,
-    payment,
+exports.orderProductStripeSuccess = catchAsync(async (req, res, next) => {
+  // when payment is successeded : we need to update schemas
+  // add OrderModel
+  // update userModel => add order in orders
+  // update productModel => add +1 in ordersNumber for each product of orders
+  const { deliveryInformation, productsToBuy, paymentMethod } = req.body;
+  const products = productsToBuy.map((item, index) => {
+    return {
+      productID: item.id,
+      size: item.size,
+      quantity: item.quantity,
+    };
   });
-  // + update the orders array of the user
-  const user = await User.findById(owner);
-  user.orders.push(newOrder._id);
-  user.confirmPassword = user.password;
-  await user.save();
-  res.status(202).json({
+
+  const newOrder = await Order.create({
+    products,
+    owner: req.userId,
+    deliveryInformation,
+    payment: {
+      method: "stripe",
+      status: "payed",
+    },
+    statusDelivery: "Order Placed",
+  });
+
+  const actualUser = await User.findById(req.userId);
+  actualUser.orders.push(newOrder._id);
+  actualUser.confirmPassword = actualUser.password;
+  await actualUser.save();
+
+  const arrayProducts = productsToBuy.map(async (item, index) => {
+    const productImpacted = await Product.findById(item.id);
+    productImpacted.ordersNumber++;
+    await productImpacted.save();
+    return productImpacted;
+  });
+
+  res.status(200).json({
     status: "success",
-    result: { order: newOrder, user },
-  });*/
+    result: {
+      order: newOrder,
+      user: actualUser,
+      products: arrayProducts,
+    },
+  });
 });
 
 exports.viewOrder = catchAsync(async (req, res, next) => {

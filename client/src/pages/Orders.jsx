@@ -41,13 +41,37 @@ export default function Orders() {
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   useEffect(() => {
-    if (paymentSuccess) {
-      const timeoutId = setTimeout(() => {
-        localStorage.removeItem("eCommerceForever");
-        navigate("/cart");
-      }, 5000);
+    const stripeSuccess = async () => {
+      const delivInfos = JSON.parse(localStorage.ecomForeverDeliveryInfos);
+      const res = await fetch("/api/v1/users/buy/stripe/success", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          deliveryInformation: delivInfos,
+          productsToBuy,
+          paymentMethod: "stripe",
+        }),
+      });
+      const data = await res.json();
+      if (data && data.status === "success") {
+        const timeoutId = setTimeout(() => {
+          localStorage.removeItem("eCommerceForever");
+          navigate("/cart");
+        }, 5000);
 
-      return () => clearTimeout(timeoutId);
+        return () => clearTimeout(timeoutId);
+      }
+      return;
+    };
+
+    if (paymentSuccess) {
+      // when successPayment => Update schemas
+      const timeoutSyncroData = setTimeout(() => {
+        stripeSuccess();
+      }, 100);
+      return () => clearTimeout(timeoutSyncroData);
     }
   }, [paymentSuccess]);
 
@@ -56,7 +80,6 @@ export default function Orders() {
     const query = new URLSearchParams(window.location.search);
 
     if (query.get("success")) {
-      // show a popup page that the command is done and redirect him to cart route (+ delete the content of the localStorage as we had ordered the things there)
       setPaymentSuccess(true);
     }
 
@@ -81,6 +104,8 @@ export default function Orders() {
     if (paymentMethod === "card") {
       if (correctDeliveryInformation(deliveryInformation)) {
         // fetch for /buy with the provided deliveryInformation + productsToBuy + stripe
+        localStorage.ecomForeverDeliveryInfos =
+          JSON.stringify(deliveryInformation); // store delivery information in localStorage (because we will go to checkout hosted stripe page and the delivery information will be reintialled)
         const res = await fetch("/api/v1/users/buy", {
           method: "POST",
           headers: {
@@ -130,6 +155,9 @@ export default function Orders() {
             <h1 className="text-3xl font-bold text-green-600">
               Payment Done successfully
             </h1>
+            <p>
+              We will redirect you to the cart section to complete your shopping
+            </p>
             <Check
               color="#ffffff"
               size={30}
@@ -153,6 +181,7 @@ export default function Orders() {
               onChange={handleChange}
               value={deliveryInformation.firstName}
               className="flex-1"
+              required
             />
             <Input
               type="text"
@@ -161,6 +190,7 @@ export default function Orders() {
               name="lastName"
               onChange={handleChange}
               value={deliveryInformation.lastName}
+              required
             />
             <Input
               type="email"
@@ -169,6 +199,7 @@ export default function Orders() {
               name="email"
               onChange={handleChange}
               value={deliveryInformation.email}
+              required
             />
             <Input
               type="text"
@@ -177,6 +208,7 @@ export default function Orders() {
               name="street"
               onChange={handleChange}
               value={deliveryInformation.street}
+              required
             />
             <Input
               type="text"
@@ -185,6 +217,7 @@ export default function Orders() {
               name="city"
               onChange={handleChange}
               value={deliveryInformation.city}
+              required
             />
             <Input
               type="text"
@@ -193,6 +226,7 @@ export default function Orders() {
               name="state"
               onChange={handleChange}
               value={deliveryInformation.state}
+              required
             />
             <div className="w-full h-0"></div>
             <Input
@@ -202,6 +236,7 @@ export default function Orders() {
               name="zipCode"
               onChange={handleChange}
               value={deliveryInformation.zipCode}
+              required
             />
             <Input
               type="text"
@@ -210,6 +245,7 @@ export default function Orders() {
               name="country"
               onChange={handleChange}
               value={deliveryInformation.country}
+              required
             />
             <Input
               type="number"
@@ -218,6 +254,7 @@ export default function Orders() {
               name="phone"
               onChange={handleChange}
               value={deliveryInformation.phone}
+              required
             />
             <button
               className="text-[10px] mx-auto hidden"

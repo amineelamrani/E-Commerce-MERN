@@ -19,6 +19,7 @@ router.use(authController.protect);
 router.get("/current", userController.getAuthenticatedUser);
 router.get("/order/:orderId", userController.viewOrder);
 router.post("/buy", userController.orderProduct);
+router.post("/buy/stripe/success", userController.orderProductStripeSuccess);
 router.post("/favourites/add/:productID", favouriteController.addFavourite);
 router.get("/favourites", favouriteController.getFavs);
 router.delete("/favourites/:favouriteID", favouriteController.deleteFav);
