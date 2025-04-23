@@ -134,7 +134,21 @@ export default function Orders() {
 
   const correctDeliveryInformation = (deliveryInfos) => {
     // check if the delivery information is robust and well given return true if not robuste return false
-    return true;
+    if (
+      deliveryInfos.firstName !== "" &&
+      deliveryInfos.lastName !== "" &&
+      deliveryInfos.email !== "" &&
+      deliveryInfos.street !== "" &&
+      deliveryInfos.city !== "" &&
+      deliveryInfos.state !== "" &&
+      deliveryInfos.country !== "" &&
+      deliveryInfos.zipCode * 1 > 0 &&
+      deliveryInfos.phone * 1 > 10
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   ////// ALgorithm Stripe updated

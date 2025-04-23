@@ -32,46 +32,63 @@ exports.orderProduct = catchAsync(async (req, res, next) => {
 
   const { deliveryInformation, productsToBuy, paymentMethod } = req.body;
   // deliveryInformation to check its robustness
-  // productsToBuy => Check if it follows the format
-  if (paymentMethod === "stripe") {
-    const paymentItems = productsToBuy.map((item, index) => {
-      return {
+  if (
+    deliveryInformation.firstName !== "" &&
+    deliveryInformation.lastName !== "" &&
+    deliveryInformation.email !== "" &&
+    deliveryInformation.street !== "" &&
+    deliveryInformation.city !== "" &&
+    deliveryInformation.state !== "" &&
+    deliveryInformation.country !== "" &&
+    deliveryInformation.zipCode * 1 > 0 &&
+    deliveryInformation.phone * 1 > 10
+  ) {
+    // productsToBuy => Check if it follows the format
+    if (paymentMethod === "stripe") {
+      const paymentItems = productsToBuy.map((item, index) => {
+        return {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: item.title,
+            },
+            unit_amount: item.price * 100,
+          },
+          quantity: item.quantity,
+        };
+      });
+
+      paymentItems.push({
         price_data: {
           currency: "usd",
           product_data: {
-            name: item.title,
+            name: "Shipping Fee",
           },
-          unit_amount: item.price * 100,
+          unit_amount: 10 * 100,
         },
-        quantity: item.quantity,
-      };
-    });
+        quantity: 1,
+      });
 
-    paymentItems.push({
-      price_data: {
-        currency: "usd",
-        product_data: {
-          name: "Shipping Fee",
-        },
-        unit_amount: 10 * 100,
-      },
-      quantity: 1,
-    });
+      const session = await stripe.checkout.sessions.create({
+        line_items: paymentItems,
+        mode: "payment",
+        success_url: `${YOUR_DOMAIN}?success=true`,
+        cancel_url: `${YOUR_DOMAIN}?canceled=true`,
+      });
+      return res.status(303).json({ url: session.url });
 
-    const session = await stripe.checkout.sessions.create({
-      line_items: paymentItems,
-      mode: "payment",
-      success_url: `${YOUR_DOMAIN}?success=true`,
-      cancel_url: `${YOUR_DOMAIN}?canceled=true`,
-    });
-    return res.status(303).json({ url: session.url });
-
-    // return res.json(303, session.url);
+      // return res.json(303, session.url);
+    } else {
+      console.log("COD");
+      res.status(202).json({
+        status: "success",
+        result: { deliveryInformation, productsToBuy, paymentMethod },
+      });
+    }
   } else {
-    console.log("COD");
-    res.status(202).json({
-      status: "success",
-      result: { deliveryInformation, productsToBuy, paymentMethod },
+    return res.status(400).json({
+      status: "fail",
+      message: "Not robust delivery information",
     });
   }
 });
