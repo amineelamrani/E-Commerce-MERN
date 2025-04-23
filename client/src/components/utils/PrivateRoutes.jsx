@@ -4,5 +4,14 @@ import { Navigate, Outlet } from "react-router";
 
 export function PrivateRoutes() {
   const { currentUser } = useContext(UserContext);
-  return currentUser ? <Outlet /> : <Navigate to="/login" />;
+  // if currentUser === 'empty' => Show loading
+  // if it became null => to login page
+  // if not of the above => redirect to Outlet
+  return currentUser === "empty" ? (
+    <h1>Loading</h1>
+  ) : currentUser === null ? (
+    <Navigate to="/login" />
+  ) : (
+    <Outlet />
+  );
 }

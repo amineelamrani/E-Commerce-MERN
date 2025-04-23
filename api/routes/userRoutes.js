@@ -18,7 +18,7 @@ router.post("/resetPassword/:email/:token", authController.resetPassword);
 router.use(authController.protect);
 router.get("/current", userController.getAuthenticatedUser);
 router.get("/order/:orderId", userController.viewOrder);
-router.post("/buy/:productID", userController.orderProduct);
+router.post("/buy", userController.orderProduct);
 router.post("/favourites/add/:productID", favouriteController.addFavourite);
 router.get("/favourites", favouriteController.getFavs);
 router.delete("/favourites/:favouriteID", favouriteController.deleteFav);

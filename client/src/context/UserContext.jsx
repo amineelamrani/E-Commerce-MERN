@@ -3,7 +3,7 @@ import { createContext, useState, useEffect } from "react";
 const UserContext = createContext();
 
 export function UserProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState("empty");
   const [newLogin, setNewLogin] = useState(false);
   const [fetchedLatest, setFetchedLatest] = useState(null);
   const [fetchedBestSeller, setFetchedBestSeller] = useState(null);
@@ -30,6 +30,8 @@ export function UserProvider({ children }) {
           favourites: data.result.favourites,
           admin: data.result.admin,
         });
+      } else {
+        setCurrentUser(null);
       }
     };
 

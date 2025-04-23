@@ -43,7 +43,7 @@ export function LoginForm({ className, ...props }) {
       setError(false);
       setNewLogin((val) => !val);
       // redirect to /verify-account route to verify the account creation
-      navigate(`/orders`);
+      navigate(`/cart`);
     } else {
       setError(true);
     }
