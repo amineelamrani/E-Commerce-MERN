@@ -79,7 +79,11 @@ export function UserProvider({ children }) {
     fetchProducts();
   }, []);
   useEffect(() => {
-    setProductsToBuy(JSON.parse(localStorage.eCommerceForever));
+    setProductsToBuy(
+      localStorage.eCommerceForever
+        ? JSON.parse(localStorage.eCommerceForever)
+        : null
+    );
   }, []);
 
   return (
