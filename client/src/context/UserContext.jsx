@@ -78,6 +78,7 @@ export function UserProvider({ children }) {
     };
     fetchProducts();
   }, []);
+
   useEffect(() => {
     setProductsToBuy(
       localStorage.eCommerceForever

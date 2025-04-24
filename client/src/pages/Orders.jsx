@@ -11,7 +11,7 @@ export default function Orders() {
   const submitRef = useRef(null);
   let navigate = useNavigate();
 
-  const { productsToBuy } = useContext(UserContext);
+  const { productsToBuy, setNewLogin } = useContext(UserContext);
   const [deliveryInformation, setDeliveryInformation] = useState({
     firstName: "",
     lastName: "",
@@ -27,6 +27,16 @@ export default function Orders() {
   const [paymentStripeSuccess, setPaymentStripeSuccess] = useState(false);
   const [paymentCODSuccess, setPaymentCODSuccess] = useState(false);
 
+  let subTotal = 0,
+    total = 0;
+  if (productsToBuy !== null) {
+    for (let i = 0; i < productsToBuy.length; i++) {
+      subTotal += productsToBuy[i].quantity * productsToBuy[i].price;
+    }
+  }
+
+  total = subTotal + 10;
+
   useEffect(() => {
     const stripeSuccess = async () => {
       const delivInfos = JSON.parse(localStorage.ecomForeverDeliveryInfos);
@@ -39,6 +49,7 @@ export default function Orders() {
           deliveryInformation: delivInfos,
           productsToBuy,
           paymentMethod: "stripe",
+          money: total,
         }),
       });
       const data = await res.json();
@@ -46,6 +57,7 @@ export default function Orders() {
         const timeoutId = setTimeout(() => {
           localStorage.removeItem("eCommerceForever");
           navigate("/cart");
+          setNewLogin((login) => !login);
         }, 5000);
 
         return () => clearTimeout(timeoutId);
@@ -67,6 +79,7 @@ export default function Orders() {
       const timeoutId = setTimeout(() => {
         localStorage.removeItem("eCommerceForever");
         navigate("/cart");
+        setNewLogin((login) => !login);
       }, 5000);
 
       return () => clearTimeout(timeoutId);
@@ -86,16 +99,6 @@ export default function Orders() {
     }
   }, []);
 
-  let subTotal = 0,
-    total = 0;
-  if (productsToBuy !== null) {
-    for (let i = 0; i < productsToBuy.length; i++) {
-      subTotal += productsToBuy[i].quantity * productsToBuy[i].price;
-    }
-  }
-
-  total = subTotal + 10;
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     // POST method to a backend endpoint for the stripe payment (provide the delivery information, send the products to buy)
@@ -113,6 +116,7 @@ export default function Orders() {
             deliveryInformation,
             productsToBuy,
             paymentMethod: "stripe",
+            money: total,
           }),
         });
         const data = await res.json();
@@ -129,6 +133,7 @@ export default function Orders() {
             deliveryInformation,
             productsToBuy,
             paymentMethod: "cod",
+            money: total,
           }),
         });
         const data = await res.json();

@@ -18,7 +18,7 @@ exports.getUsers = catchAsync(async (req, res, next) => {
 });
 
 exports.orderProduct = catchAsync(async (req, res, next) => {
-  const { deliveryInformation, productsToBuy, paymentMethod } = req.body;
+  const { deliveryInformation, productsToBuy, paymentMethod, money } = req.body;
   // deliveryInformation to check its robustness
   if (
     deliveryInformation.firstName !== "" &&
@@ -83,6 +83,7 @@ exports.orderProduct = catchAsync(async (req, res, next) => {
         payment: {
           method: "cod",
           status: "pending",
+          money,
         },
         statusDelivery: "Order Placed",
       });
@@ -121,7 +122,7 @@ exports.orderProductStripeSuccess = catchAsync(async (req, res, next) => {
   // add OrderModel
   // update userModel => add order in orders
   // update productModel => add +1 in ordersNumber for each product of orders
-  const { deliveryInformation, productsToBuy, paymentMethod } = req.body;
+  const { deliveryInformation, productsToBuy, paymentMethod, money } = req.body;
   const products = productsToBuy.map((item, index) => {
     return {
       productID: item.id,
@@ -137,6 +138,7 @@ exports.orderProductStripeSuccess = catchAsync(async (req, res, next) => {
     payment: {
       method: "stripe",
       status: "payed",
+      money,
     },
     statusDelivery: "Order Placed",
   });
