@@ -95,7 +95,7 @@ export default function Header() {
               </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <NavigationMenuLink>
-                  <Link to="/orders">Orders</Link>
+                  <Link to="/purchased">Purchases</Link>
                 </NavigationMenuLink>
                 <NavigationMenuLink>Logout</NavigationMenuLink>
               </NavigationMenuContent>

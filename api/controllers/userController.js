@@ -18,18 +18,6 @@ exports.getUsers = catchAsync(async (req, res, next) => {
 });
 
 exports.orderProduct = catchAsync(async (req, res, next) => {
-  //// /!\ Update this orderProduct endPoint
-  // 1. get deliveryInformation + products to buy + payment method
-  // 2. check deliveryinformation robustness (skip now)
-  ////// IF STRIPE
-  // 3. take each product from productsToBuy => Create a checkout session (first step work with only the prices sent via frontend)
-  // 4. Once success => create an order (orderModel) with the productsToBuy + deliveryInformation + payment status + statusDelivery 'order Placed'
-  // 4.1 and update the userModel (ordersID add it) + update productModel (ordersNumber to add 1 or more for each product)
-  // 4.2. In success => redirect to /orders?success=true
-
-  ////// IF COD
-  // 2. get delivery information and add order and update userModel (ordersID add it) + update productModel (ordersNumber to add 1 or more for each product)
-
   const { deliveryInformation, productsToBuy, paymentMethod } = req.body;
   // deliveryInformation to check its robustness
   if (
@@ -79,10 +67,45 @@ exports.orderProduct = catchAsync(async (req, res, next) => {
 
       // return res.json(303, session.url);
     } else {
-      console.log("COD");
-      res.status(202).json({
+      // if COD => Directly update the schemas and for the payment say that payment is pending
+      const products = productsToBuy.map((item, index) => {
+        return {
+          productID: item.id,
+          size: item.size,
+          quantity: item.quantity,
+        };
+      });
+
+      const newOrder = await Order.create({
+        products,
+        owner: req.userId,
+        deliveryInformation,
+        payment: {
+          method: "cod",
+          status: "pending",
+        },
+        statusDelivery: "Order Placed",
+      });
+
+      const actualUser = await User.findById(req.userId);
+      actualUser.orders.push(newOrder._id);
+      actualUser.confirmPassword = actualUser.password;
+      await actualUser.save();
+
+      const arrayProducts = productsToBuy.map(async (item, index) => {
+        const productImpacted = await Product.findById(item.id);
+        productImpacted.ordersNumber++;
+        await productImpacted.save();
+        return productImpacted;
+      });
+
+      res.status(200).json({
         status: "success",
-        result: { deliveryInformation, productsToBuy, paymentMethod },
+        result: {
+          order: newOrder,
+          user: actualUser,
+          products: arrayProducts,
+        },
       });
     }
   } else {

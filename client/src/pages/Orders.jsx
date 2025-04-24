@@ -11,20 +11,6 @@ export default function Orders() {
   const submitRef = useRef(null);
   let navigate = useNavigate();
 
-  // /!\ This is only for authorized people
-
-  // first check the total - check if the products are all set (you need to check if there is a task done manually by the client inside the code(no unauthorized code manipulation should be done by the client on the front end))
-  // we will have a comm with the server to check for the consistency of the data in the productsToBuy state (userContext)
-
-  // Check the coherence of the data sent
-
-  // This is for authorized people only (done in the Routes)
-  // First get the Total price of the products given
-  // check for the consistency of the order (or do not prioritize it in this MVP)
-  // handle Stripe(sandbox) and Paypal(Sandbox) and COD
-  // check for the consistency of the delivery information (in both front end and backend)
-  // Possible improve the payment process for the stripe and sandbox (maybe I will need to align with the documentation)
-
   const { productsToBuy } = useContext(UserContext);
   const [deliveryInformation, setDeliveryInformation] = useState({
     firstName: "",
@@ -38,7 +24,8 @@ export default function Orders() {
     phone: "",
   });
   const [paymentMethod, setPaymentMethod] = useState("card");
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [paymentStripeSuccess, setPaymentStripeSuccess] = useState(false);
+  const [paymentCODSuccess, setPaymentCODSuccess] = useState(false);
 
   useEffect(() => {
     const stripeSuccess = async () => {
@@ -66,21 +53,32 @@ export default function Orders() {
       return;
     };
 
-    if (paymentSuccess) {
+    if (paymentStripeSuccess) {
       // when successPayment => Update schemas
       const timeoutSyncroData = setTimeout(() => {
         stripeSuccess();
       }, 100);
       return () => clearTimeout(timeoutSyncroData);
     }
-  }, [paymentSuccess]);
+  }, [paymentStripeSuccess]);
+
+  useEffect(() => {
+    if (paymentCODSuccess) {
+      const timeoutId = setTimeout(() => {
+        localStorage.removeItem("eCommerceForever");
+        navigate("/cart");
+      }, 5000);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [paymentCODSuccess]);
 
   useEffect(() => {
     // Check to see if this is a redirect back from Checkout
     const query = new URLSearchParams(window.location.search);
 
     if (query.get("success")) {
-      setPaymentSuccess(true);
+      setPaymentStripeSuccess(true);
     }
 
     if (query.get("canceled")) {
@@ -121,6 +119,24 @@ export default function Orders() {
         window.location.href = data.url;
       }
     } else {
+      if (correctDeliveryInformation(deliveryInformation)) {
+        const res = await fetch("/api/v1/users/buy", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            deliveryInformation,
+            productsToBuy,
+            paymentMethod: "cod",
+          }),
+        });
+        const data = await res.json();
+        if (data && data.status === "success") {
+          setPaymentCODSuccess(true);
+        }
+      }
+
       console.log("cod");
     }
   };
@@ -164,7 +180,7 @@ export default function Orders() {
   return (
     <>
       <div className="flex flex-col md:flex-row w-full py-15 gap-5 relative">
-        {paymentSuccess && (
+        {(paymentStripeSuccess || paymentCODSuccess) && (
           <div className="absolute w-full h-full z-50 gap-10 flex flex-col items-center justify-center bg-white/30 backdrop-blur-md">
             <h1 className="text-3xl font-bold text-green-600">
               Payment Done successfully

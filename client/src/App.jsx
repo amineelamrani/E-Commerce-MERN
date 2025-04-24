@@ -15,6 +15,7 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import { UserProvider } from "./context/UserContext.jsx";
 import { PrivateRoutes } from "./components/utils/PrivateRoutes";
+import Purchases from "./pages/Purchases";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/product/:productID" element={<Product />} />
             <Route element={<PrivateRoutes />}>
               <Route path="/orders" element={<Orders />} />
+              <Route path="/purchased" element={<Purchases />} />
             </Route>
 
             <Route path="/contact" element={<Contact />} />
