@@ -62,6 +62,7 @@ export default function Product() {
 
   useEffect(() => {
     const fetchReviewsData = async () => {
+      setIsProductReviewed(false);
       const res = await fetch(`/api/v1/products/${productID}/isreviewed`, {
         method: "GET",
         headers: {
@@ -217,6 +218,11 @@ export default function Product() {
               {productsPurchased && productsPurchased.includes(productID) && (
                 <p className="absolute right-0 top-4 bg-yellow-500 px-2 rotate-20 rounded-sm">
                   Purchased
+                </p>
+              )}
+              {isProductReviewed && (
+                <p className="absolute left-0 top-4 bg-green-200 px-2 -rotate-20 rounded-sm">
+                  Reviewed
                 </p>
               )}
             </div>
