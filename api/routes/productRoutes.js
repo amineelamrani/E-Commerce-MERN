@@ -15,6 +15,7 @@ router.get("/:productID/reviews", productController.getReviews);
 router.use(authController.protect);
 router.get("/purchased/products", productController.getPurchasedProducts);
 router.post("/:productID/reviews", productController.addReview);
+router.get("/:productID/isreviewed", productController.isProductReviewed);
 
 // Admin restricted routes
 router.use(authController.adminRestricted);

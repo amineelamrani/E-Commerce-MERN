@@ -4,13 +4,15 @@ const UserContext = createContext();
 
 export function UserProvider({ children }) {
   const [currentUser, setCurrentUser] = useState("empty");
-  const [newLogin, setNewLogin] = useState(false);
+  const [newLogin, setNewLogin] = useState(false); // new login to update when login b another account + when we make the purchase
   const [fetchedLatest, setFetchedLatest] = useState(null);
   const [fetchedBestSeller, setFetchedBestSeller] = useState(null);
   const [fetchedProducts, setFetchedProducts] = useState(null); // Collection data : all products
   const [error, setError] = useState(false);
   const [basket, setBasket] = useState(false);
   const [productsToBuy, setProductsToBuy] = useState(null);
+  const [productsPurchased, setProductsPurchased] = useState(null);
+  // it would be like this productsPurchased = [{productId, size}]
 
   useEffect(() => {
     // Here fetch for the current user
@@ -36,6 +38,23 @@ export function UserProvider({ children }) {
     };
 
     fetchCurrentUser();
+  }, [newLogin]);
+
+  useEffect(() => {
+    const fetchProductsPurchased = async () => {
+      const res = await fetch("/api/v1/products/purchased/products", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (data && data.status === "success") {
+        setProductsPurchased(data.result);
+      }
+    };
+
+    fetchProductsPurchased();
   }, [newLogin]);
 
   useEffect(() => {
@@ -104,6 +123,7 @@ export function UserProvider({ children }) {
         setBasket,
         productsToBuy,
         setProductsToBuy,
+        productsPurchased,
       }}
     >
       {children}

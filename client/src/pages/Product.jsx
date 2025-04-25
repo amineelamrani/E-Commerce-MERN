@@ -9,6 +9,20 @@ import RelatedProductsSection from "@/components/RelatedProductsSection";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import UserContext from "@/context/UserContext";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import FiveStarsInputReview from "@/components/FiveStarsInputReview";
+import { Loader2 } from "lucide-react";
 
 export default function Product() {
   let { productID } = useParams();
@@ -16,7 +30,13 @@ export default function Product() {
   const [fetchedReviews, setFetchedReviews] = useState(null);
   const [highlightedImage, setHighlightedImage] = useState(null);
   const [size, setSize] = useState("");
-  const { setBasket } = useContext(UserContext);
+  const { setBasket, productsPurchased } = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isProductReviewed, setIsProductReviewed] = useState(false);
+  const [reviewItem, setReviewItem] = useState({
+    content: "",
+    rating: 0,
+  });
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -42,6 +62,25 @@ export default function Product() {
 
   useEffect(() => {
     const fetchReviewsData = async () => {
+      const res = await fetch(`/api/v1/products/${productID}/isreviewed`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (data && data.status === "success") {
+        if (data.result.length > 0) {
+          setIsProductReviewed(true);
+        }
+      }
+    };
+
+    fetchReviewsData();
+  }, [productID]);
+
+  useEffect(() => {
+    const fetchReviewsData = async () => {
       const res = await fetch(`/api/v1/products/${productID}/reviews`, {
         method: "GET",
         headers: {
@@ -55,10 +94,32 @@ export default function Product() {
     };
 
     fetchReviewsData();
-  }, []);
+  }, [isProductReviewed]);
 
   const handleImageClick = (e) => {
     setHighlightedImage(e.target.currentSrc);
+  };
+
+  const handleAddReview = async () => {
+    // Algo
+    // set loading to true
+    // do a fetch to add the review (dont give the user the possibility to update while it is on loading)
+    // once done successfully => show that it is done successfully thank him - click anywhere to close - dont give the possibility to review again
+    setIsLoading(true);
+    if (reviewItem.content !== "") {
+      const res = await fetch(`/api/v1/products/${productID}/reviews`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reviewItem),
+      });
+      const data = await res.json();
+      if (data && data.status === "success") {
+        setIsLoading(false);
+        setIsProductReviewed(true);
+      }
+    }
   };
 
   const handleAddCart = () => {
@@ -140,7 +201,7 @@ export default function Product() {
       {fetchedProduct !== null && (
         <div className="w-full">
           <div className="py-14 flex flex-row w-full justify-around items-start gap-10 mx-auto">
-            <div className="w-1/2 flex flex-col md:flex-row items-start justify-end gap-2">
+            <div className="w-1/2 flex flex-col md:flex-row items-start justify-end gap-2 relative">
               <div className="flex flex-col gap-1  min-w-20">
                 {fetchedProduct.images.map((image, index) => (
                   <img
@@ -153,12 +214,18 @@ export default function Product() {
                 ))}
               </div>
               <img src={highlightedImage} className="" alt="" />
+              {productsPurchased && productsPurchased.includes(productID) && (
+                <p className="absolute right-0 top-4 bg-yellow-500 px-2 rotate-20 rounded-sm">
+                  Purchased
+                </p>
+              )}
             </div>
             <div className="w-1/2 flex flex-col gap-3">
               <h1 className="text-3xl font-bold">{fetchedProduct.title}</h1>
               <div className="flex items-center gap-2 text-sm">
                 <FiveStartFeedback rating={fetchedProduct.reviewsMedian} />
                 <p>({fetchedProduct.reviewsNumber})</p>
+                <p>{fetchedProduct.ordersNumber} orders</p>
               </div>
               <h3 className="text-3xl font-bold">${fetchedProduct.price}</h3>
               <p className="text-slate-600">{fetchedProduct.description}</p>
@@ -185,9 +252,73 @@ export default function Product() {
                 <Button className="w-38" onClick={handleAddCart}>
                   ADD TO CART
                 </Button>
-                <Button className="w-38" variant="secondary">
-                  ADD A REVIEW
-                </Button>
+                {productsPurchased &&
+                  productsPurchased.includes(productID) &&
+                  !isProductReviewed && (
+                    <Dialog>
+                      <DialogTrigger
+                        className="w-38 bg-yellow-500 rounded-md hover:cursor-pointer hover:text-white text-black "
+                        variant="secondary"
+                      >
+                        Open
+                      </DialogTrigger>
+
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Adding review</DialogTitle>
+                          <DialogDescription className="text-xs">
+                            Thanks for purchasing from us. Now next step is to
+                            kindly give us your feedback on the items purchased
+                            Dear client so we can improve our services!
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="flex flex-col gap-3">
+                          <div className="flex w-full items-center gap-2">
+                            <Label htmlFor="content">Review</Label>
+                            <Input
+                              type="text"
+                              id="content"
+                              value={reviewItem.content}
+                              onChange={(e) => {
+                                setReviewItem({
+                                  ...reviewItem,
+                                  ["content"]: e.target.value,
+                                });
+                              }}
+                              placeholder="Please provide your review..."
+                            />
+                          </div>
+                          <div className="flex w-full items-center gap-2">
+                            <Label>Rating</Label>
+                            <FiveStarsInputReview
+                              setReviewItem={setReviewItem}
+                              reviewItem={reviewItem}
+                            />
+                          </div>
+                        </div>
+
+                        <DialogFooter>
+                          {!isProductReviewed && (
+                            <Button
+                              onClick={handleAddReview}
+                              disabled={isLoading ? true : false}
+                            >
+                              {isLoading && (
+                                <Loader2 className="animate-spin" />
+                              )}
+                              Add review
+                            </Button>
+                          )}
+
+                          <DialogClose asChild>
+                            <Button type="button" variant="secondary">
+                              Close
+                            </Button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  )}
                 {/* (only verified Purchaser) */}
               </div>
 
@@ -202,7 +333,7 @@ export default function Product() {
             <TabsList className="border">
               <TabsTrigger value="description">Description</TabsTrigger>
               <TabsTrigger value="reviews">
-                Reviews ({fetchedProduct.reviewsNumber})
+                Reviews ({fetchedReviews !== null && fetchedReviews.length})
               </TabsTrigger>
             </TabsList>
             <TabsContent value="description" className="border p-3">

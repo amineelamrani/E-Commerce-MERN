@@ -53,16 +53,3 @@ export default function PurchasesElements({ orderID, index }) {
     </>
   );
 }
-{
-  /* <div>
-<h1>Order #{orderID}</h1>
-<div>
-  order number (1,2...) 
-  order #orderID
-  status of delivery 
-  payment Type 
-  status payment
-  total paid or will be paid data of order
-</div>
-</div> */
-}

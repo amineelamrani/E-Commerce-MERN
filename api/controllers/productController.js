@@ -79,13 +79,12 @@ exports.getProduct = catchAsync(async (req, res, next) => {
 exports.addReview = catchAsync(async (req, res, next) => {
   const { productID } = req.params;
 
-  const { content, rating, productSize } = req.body;
+  const { content, rating } = req.body;
 
   const newReview = await Review.create({
     owner: req.userId,
     content,
     rating,
-    productSize,
     product: productID,
   });
   if (!newReview) {
@@ -158,7 +157,6 @@ exports.getBest5SellersProducts = catchAsync(async (req, res, next) => {
 });
 
 exports.getPurchasedProducts = catchAsync(async (req, res, next) => {
-  console.log(req.userId);
   const user = await User.findById(req.userId)
     .select("orders")
     .populate("orders", "products statusDelivery");
@@ -177,5 +175,17 @@ exports.getPurchasedProducts = catchAsync(async (req, res, next) => {
   res.status(202).json({
     status: "success",
     result: uniqueProductIDs,
+  });
+});
+
+exports.isProductReviewed = catchAsync(async (req, res, next) => {
+  const { productID } = req.params;
+  const userReviews = await Review.find({
+    product: productID,
+    owner: req.userId,
+  });
+  res.status(202).json({
+    status: "success",
+    result: userReviews,
   });
 });
