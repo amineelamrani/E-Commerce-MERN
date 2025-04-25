@@ -1,4 +1,6 @@
+const Order = require("../models/orderModel");
 const Review = require("../models/reviewModel");
+const User = require("../models/userModel");
 const Product = require("./../models/productModel");
 const catchAsync = require("./../utils/catchAsync");
 
@@ -152,5 +154,28 @@ exports.getBest5SellersProducts = catchAsync(async (req, res, next) => {
   res.status(202).json({
     status: "success",
     result: products,
+  });
+});
+
+exports.getPurchasedProducts = catchAsync(async (req, res, next) => {
+  console.log(req.userId);
+  const user = await User.findById(req.userId)
+    .select("orders")
+    .populate("orders", "products statusDelivery");
+
+  const userOrdersDelivered = user.orders.filter(
+    (order) => order.statusDelivery === "Delivered"
+  );
+
+  // Now userOrdersDelivered => take the userOrdersDelivered.products (all of them and delete the redundance)
+  const arrayOfProducts = userOrdersDelivered.flatMap((entry) =>
+    entry.products.map((product) => product.productID.toString())
+  );
+
+  const uniqueProductIDs = [...new Set(arrayOfProducts)];
+
+  res.status(202).json({
+    status: "success",
+    result: uniqueProductIDs,
   });
 });

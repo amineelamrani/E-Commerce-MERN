@@ -13,7 +13,7 @@ router.get("/:productID/reviews", productController.getReviews);
 
 // Protected routes
 router.use(authController.protect);
-
+router.get("/purchased/products", productController.getPurchasedProducts);
 router.post("/:productID/reviews", productController.addReview);
 
 // Admin restricted routes
