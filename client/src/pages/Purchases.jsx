@@ -14,7 +14,6 @@ import {
 export default function Purchases() {
   // in this route we will display the items purchased by the user and showing their status (delivered, order placed ...)
   const { currentUser } = useContext(UserContext);
-  console.log(currentUser);
   // for the orders in the currentUser state => search for them and display their status for the user
   return (
     <div className="pt-10 flex flex-col gap-2">

@@ -27,5 +27,7 @@ router.delete("/favourites/:favouriteID", favouriteController.deleteFav);
 // Admin restricted routes
 router.use(authController.adminRestricted);
 router.get("/", userController.getUsers);
+router.get("/admin/orders", userController.getAllOrders);
+router.patch("/admin/orders/:orderID/update", userController.updateOrderStatus);
 
 module.exports = router;

@@ -189,3 +189,38 @@ exports.isProductReviewed = catchAsync(async (req, res, next) => {
     result: userReviews,
   });
 });
+
+exports.deleteProduct = catchAsync(async (req, res, next) => {
+  const { productID } = req.params;
+  const deletedProduct = await Product.findByIdAndDelete(productID);
+  if (!deletedProduct) {
+    return res
+      .status(404)
+      .json({ status: "fail", message: "Product not found." });
+  }
+  res
+    .status(200)
+    .json({ status: "success", message: "Product deleted successfully." });
+});
+
+exports.updateProduct = catchAsync(async (req, res, next) => {
+  const { productID } = req.paramid;
+  const { title, price } = req.body;
+
+  const updates = {};
+  if (title !== undefined) updates.title = title;
+  if (price !== undefined) updates.price = price;
+
+  const updatedProduct = await Product.findByIdAndUpdate(
+    productID,
+    { $set: updates },
+    { new: true }
+  );
+  if (!updatedProduct) {
+    return res
+      .status(404)
+      .json({ status: "fail", message: "Product not found." });
+  }
+
+  res.status(200).json({ status: "success", result: updatedProduct });
+});

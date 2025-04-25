@@ -189,3 +189,59 @@ exports.getAuthenticatedUser = catchAsync(async (req, res, next) => {
     result: user,
   });
 });
+
+exports.getAllOrders = catchAsync(async (req, res, next) => {
+  // get all orders 10 orders per fetching (and do a paging in the front end)
+  const page = parseInt(req.query.page) || 1; // default to page 1
+  const limit = 10;
+  const skip = (page - 1) * limit;
+
+  const orders = await Order.find()
+    .skip(skip)
+    .limit(limit)
+    .sort({ createdAt: -1 });
+
+  const totalOrders = await Order.countDocuments();
+
+  res.status(200).json({
+    page,
+    totalPages: Math.ceil(totalOrders / limit),
+    totalOrders,
+    orders,
+  });
+});
+
+exports.updateOrderStatus = catchAsync(async (req, res, next) => {
+  // Update delivery status + update payment in case of COD
+  // /!\ Add the possibility to send an email informing him that his order is delivered and purchased and he can put a review
+  // DeliveryStatus => Order Placed,Packing, Shipping, Deliverd
+  // payment => pending + payed
+  const { orderID } = req.params;
+  const { statusDelivery } = req.body;
+
+  const updatedOrder = await Order.findById(orderID);
+
+  if (!updatedOrder) {
+    return res
+      .status(404)
+      .json({ status: "fail", message: "Order not found." });
+  }
+
+  if (
+    updatedOrder.payment.method === "cod" &&
+    updatedOrder.payment.status === "pending" &&
+    updatedOrder.statusDelivery === "Delivered"
+  ) {
+    updatedOrder.payment = { ...updatedOrder.payment, ["status"]: "payed" };
+  }
+  if (statusDelivery !== undefined) {
+    updatedOrder.statusDelivery = statusDelivery;
+  }
+
+  await updatedOrder.save();
+
+  res.status(202).json({
+    status: "success",
+    result: updatedOrder,
+  });
+});

@@ -19,7 +19,10 @@ router.get("/:productID/isreviewed", productController.isProductReviewed);
 
 // Admin restricted routes
 router.use(authController.adminRestricted);
+// we can view products (already done /products) - now need to add products and delete some and update the price of some
 
 router.post("/", productController.addProduct);
+router.delete("/:productID", productController.deleteProduct);
+router.patch("/:productID", productController.updateProduct);
 
 module.exports = router;
