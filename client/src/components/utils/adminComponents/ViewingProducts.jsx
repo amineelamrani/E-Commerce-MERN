@@ -1,9 +1,8 @@
 import UserContext from "@/context/UserContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -21,9 +20,25 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function ViewingProducts() {
   const { fetchedProducts, setDeleteProducts } = useContext(UserContext);
+  const [inputData, setInputData] = useState({
+    title: "",
+    price: "",
+  });
 
   const handleDeleteProduct = async (e) => {
     const productID = e.target.id.split(" ")[1];
@@ -40,8 +55,20 @@ export default function ViewingProducts() {
     }
   };
 
-  const handleUpdateProduct = (e) => {
-    console.log(e.target.parentElement.parentElement.id);
+  const handleUpdateProduct = async (e) => {
+    const productID = e.target.id.split(" ")[1];
+    const res = await fetch(`/api/v1/products/${productID}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(inputData),
+    });
+    const data = await res.json();
+    console.log(data);
+    if (data && data.status === "success") {
+      setDeleteProducts((st) => !st);
+    }
   };
 
   return (
@@ -94,10 +121,74 @@ export default function ViewingProducts() {
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
-                  <Pencil
-                    className="hover:cursor-pointer hover:scale-125"
-                    onClick={handleUpdateProduct}
-                  />
+
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Pencil
+                        onClick={() =>
+                          setInputData({
+                            title: product.title,
+                            price: product.price,
+                          })
+                        }
+                        className="hover:cursor-pointer hover:scale-125"
+                      />
+                    </DialogTrigger>
+
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Edit Product</DialogTitle>
+                        <DialogDescription>
+                          Make changes to the selected product.
+                        </DialogDescription>
+                      </DialogHeader>
+
+                      <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="title" className="text-right">
+                            Title
+                          </Label>
+                          <Input
+                            id="title"
+                            value={inputData.title}
+                            className="col-span-3"
+                            onChange={(e) =>
+                              setInputData({
+                                ...inputData,
+                                ["title"]: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="price" className="text-right">
+                            Price
+                          </Label>
+                          <Input
+                            id="price"
+                            value={inputData.price}
+                            className="col-span-3"
+                            onChange={(e) =>
+                              setInputData({
+                                ...inputData,
+                                ["price"]: e.target.value * 1,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button
+                          id={`dialog ${product._id}`}
+                          type="submit"
+                          onClick={handleUpdateProduct}
+                        >
+                          Save changes
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                 </TableCell>
               </TableRow>
             ))}

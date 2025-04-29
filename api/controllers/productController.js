@@ -204,7 +204,7 @@ exports.deleteProduct = catchAsync(async (req, res, next) => {
 });
 
 exports.updateProduct = catchAsync(async (req, res, next) => {
-  const { productID } = req.paramid;
+  const { productID } = req.params;
   const { title, price } = req.body;
 
   const updates = {};
