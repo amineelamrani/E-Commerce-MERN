@@ -12,6 +12,7 @@ export function UserProvider({ children }) {
   const [basket, setBasket] = useState(false);
   const [productsToBuy, setProductsToBuy] = useState(null);
   const [productsPurchased, setProductsPurchased] = useState(null);
+  const [deleteProducts, setDeleteProducts] = useState(false); //state to update whenever there is a product deleted in the admin dash
   // it would be like this productsPurchased = [{productId, size}]
 
   useEffect(() => {
@@ -96,7 +97,7 @@ export function UserProvider({ children }) {
       }
     };
     fetchProducts();
-  }, []);
+  }, [deleteProducts]);
 
   useEffect(() => {
     setProductsToBuy(
@@ -124,6 +125,8 @@ export function UserProvider({ children }) {
         productsToBuy,
         setProductsToBuy,
         productsPurchased,
+        deleteProducts,
+        setDeleteProducts,
       }}
     >
       {children}
