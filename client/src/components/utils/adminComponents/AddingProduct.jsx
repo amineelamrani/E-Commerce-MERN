@@ -28,6 +28,7 @@ export default function AddingProduct() {
   const [text, setText] = useState("");
   const [inputData, setInputData] = useState({ ...initialState });
   const { setDeleteProducts } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -40,11 +41,13 @@ export default function AddingProduct() {
   };
 
   const handleChange = (e) => {
+    setLoading(false);
     setText(e.target.value);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const res = await fetch("/api/v1/products/", {
       method: "POST",
@@ -54,14 +57,11 @@ export default function AddingProduct() {
       body: JSON.stringify(inputData),
     });
     const data = await res.json();
-    console.log(data);
     if (data && data.status === "success") {
       setInputData({ ...initialState });
       setDeleteProducts((st) => !st);
+      setLoading(false);
     }
-
-    console.log(inputData);
-    console.log("submitted...");
   };
   return (
     <div className="py-5 px-10">
@@ -79,9 +79,10 @@ export default function AddingProduct() {
             id="title"
             placeholder="Enter the title"
             value={inputData.title}
-            onChange={(e) =>
-              setInputData({ ...inputData, ["title"]: e.target.value })
-            }
+            onChange={(e) => {
+              setInputData({ ...inputData, ["title"]: e.target.value });
+              setLoading(true);
+            }}
             required
           />
         </div>
@@ -177,7 +178,9 @@ export default function AddingProduct() {
             </ul>
           </div>
         </div>
-        <Button type="submit">Oh riah</Button>
+        <Button type="submit" disabled={loading ? true : false}>
+          Oh riah
+        </Button>
       </form>
     </div>
   );
