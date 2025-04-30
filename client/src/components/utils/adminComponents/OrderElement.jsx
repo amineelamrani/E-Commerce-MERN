@@ -35,13 +35,14 @@ export default function OrderElement({ order, setUpdatedData }) {
       <Cuboid size={47} className="my-3 border p-1" />
 
       <div className="text-wrap max-w-72 text-sm">
-        <p className="mb-2">{productTitle.join(", ")}</p>
-        <p className="font-bold">
+        <p className="mb-2 text-xs font-bold">{productTitle.join(", ")}</p>
+        <p className="font-bold italic">
           {order.deliveryInformation.firstName}{" "}
           {order.deliveryInformation.lastName}
         </p>
         <p>
-          {`Adress : ${order.deliveryInformation.street}, ${order.deliveryInformation.city}, ${order.deliveryInformation.state}, ${order.deliveryInformation.country}, ${order.deliveryInformation.zipCode}`}
+          <span className="text-blue-900 font-bold ">Adress :</span>
+          {` ${order.deliveryInformation.street}, ${order.deliveryInformation.city}, ${order.deliveryInformation.state}, ${order.deliveryInformation.country}, ${order.deliveryInformation.zipCode}`}
         </p>
       </div>
 
