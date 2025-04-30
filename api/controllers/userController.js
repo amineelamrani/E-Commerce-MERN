@@ -73,6 +73,7 @@ exports.orderProduct = catchAsync(async (req, res, next) => {
           productID: item.id,
           size: item.size,
           quantity: item.quantity,
+          title: item.title,
         };
       });
 
@@ -128,6 +129,7 @@ exports.orderProductStripeSuccess = catchAsync(async (req, res, next) => {
       productID: item.id,
       size: item.size,
       quantity: item.quantity,
+      title: item.title,
     };
   });
 

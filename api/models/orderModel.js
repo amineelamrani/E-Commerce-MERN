@@ -15,6 +15,9 @@ const orderSchema = new mongoose.Schema(
           type: Number,
           min: 0,
         },
+        title: {
+          type: String,
+        },
       },
     ],
     owner: {
