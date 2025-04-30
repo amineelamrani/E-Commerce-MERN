@@ -65,7 +65,6 @@ export default function ViewingProducts() {
       body: JSON.stringify(inputData),
     });
     const data = await res.json();
-    console.log(data);
     if (data && data.status === "success") {
       setDeleteProducts((st) => !st);
     }
@@ -169,6 +168,7 @@ export default function ViewingProducts() {
                             id="price"
                             value={inputData.price}
                             className="col-span-3"
+                            type="number"
                             onChange={(e) =>
                               setInputData({
                                 ...inputData,
