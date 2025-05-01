@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import cartIcon from "../assets/icons/cart-icon.svg";
 import { Button } from "@/components/ui/buttonHeader";
 import { UserRound, Search } from "lucide-react";
@@ -18,6 +18,7 @@ import UserContext from "@/context/UserContext";
 
 export default function Header() {
   let location = useLocation();
+  let navigate = useNavigate();
   const { basket, setBasket, currentUser, setNewLogin } =
     useContext(UserContext);
 
@@ -110,8 +111,8 @@ export default function Header() {
                 <UserRound className="h-6 w-6" />
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <NavigationMenuLink>
-                  <Link to="/purchased">Purchases</Link>
+                <NavigationMenuLink onClick={() => navigate("/purchased")}>
+                  Purchases
                 </NavigationMenuLink>
                 {currentUser && currentUser !== "empty" && (
                   <NavigationMenuLink onClick={handleLoginClick}>
