@@ -18,7 +18,8 @@ import UserContext from "@/context/UserContext";
 
 export default function Header() {
   let location = useLocation();
-  const { basket, setBasket } = useContext(UserContext);
+  const { basket, setBasket, currentUser, setNewLogin } =
+    useContext(UserContext);
 
   const calculateOrdersNumber = () => {
     const arr = JSON.parse(localStorage.eCommerceForever);
@@ -27,6 +28,19 @@ export default function Header() {
       counter += arr[i].quantity;
     }
     return counter;
+  };
+
+  const handleLoginClick = async () => {
+    const res = await fetch("/api/v1/users/signout", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+    if (data && data.status === "success") {
+      setNewLogin((st) => !st);
+    }
   };
 
   return (
@@ -75,11 +89,13 @@ export default function Header() {
             CONTACT
           </Button>
         </Link>
-        <Link to="/admin">
-          <Button variant="outline" className="px-5 rounded-full">
-            AdminPanel
-          </Button>
-        </Link>
+        {currentUser && currentUser.admin && (
+          <Link to="/admin">
+            <Button variant="outline" className="px-5 rounded-full">
+              AdminPanel
+            </Button>
+          </Link>
+        )}
       </div>
 
       <div className="flex items-center">
@@ -97,7 +113,11 @@ export default function Header() {
                 <NavigationMenuLink>
                   <Link to="/purchased">Purchases</Link>
                 </NavigationMenuLink>
-                <NavigationMenuLink>Logout</NavigationMenuLink>
+                {currentUser && currentUser !== "empty" && (
+                  <NavigationMenuLink onClick={handleLoginClick}>
+                    Logout
+                  </NavigationMenuLink>
+                )}
               </NavigationMenuContent>
             </NavigationMenuItem>
           </NavigationMenuList>

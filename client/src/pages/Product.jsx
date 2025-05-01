@@ -54,7 +54,7 @@ export default function Product() {
     };
 
     fetchProductData();
-  }, [productID]);
+  }, [productID, isProductReviewed]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -266,7 +266,7 @@ export default function Product() {
                         className="w-38 bg-yellow-500 rounded-md hover:cursor-pointer hover:text-white text-black "
                         variant="secondary"
                       >
-                        Open
+                        ADD REVIEW
                       </DialogTrigger>
 
                       <DialogContent>

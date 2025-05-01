@@ -81,7 +81,7 @@ export function UserProvider({ children }) {
 
     fetchData("/api/v1/products/latest", setFetchedLatest);
     fetchData("/api/v1/products/bestseller", setFetchedBestSeller);
-  }, []);
+  }, [newLogin]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -97,7 +97,7 @@ export function UserProvider({ children }) {
       }
     };
     fetchProducts();
-  }, [deleteProducts]);
+  }, [deleteProducts, newLogin]);
 
   useEffect(() => {
     setProductsToBuy(
