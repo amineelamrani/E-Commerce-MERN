@@ -232,7 +232,8 @@ exports.updateOrderStatus = catchAsync(async (req, res, next) => {
   if (
     updatedOrder.payment.method === "cod" &&
     updatedOrder.payment.status === "pending" &&
-    updatedOrder.statusDelivery === "Delivered"
+    updatedOrder.statusDelivery === "Shipping" &&
+    statusDelivery === "Delivered"
   ) {
     updatedOrder.payment = { ...updatedOrder.payment, ["status"]: "payed" };
   }
