@@ -100,7 +100,7 @@ export default function Header() {
       </div>
 
       <div className="flex items-center">
-        <Link to="/collection">
+        <Link to="/collection?search=">
           <Search className="h-6 w-6" />
         </Link>
 

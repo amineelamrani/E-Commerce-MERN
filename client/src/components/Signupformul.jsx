@@ -19,7 +19,6 @@ export function Signupformul({ className, ...props }) {
     e.preventDefault();
     // check data before sending the request to the server : password is the same as confirmPassword
     await signUpFetch();
-    console.log("submitted");
   };
 
   const signUpFetch = async () => {

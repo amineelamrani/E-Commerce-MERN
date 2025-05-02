@@ -24,7 +24,6 @@ export default function AccountVerification() {
       }
     );
     const data = await res.json();
-    console.log(data);
     if (data && data.status === "success") {
       setLoading(false);
       navigate("/orders");

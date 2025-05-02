@@ -141,8 +141,6 @@ export default function Orders() {
           setPaymentCODSuccess(true);
         }
       }
-
-      console.log("cod");
     }
   };
 
