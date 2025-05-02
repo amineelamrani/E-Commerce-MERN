@@ -170,13 +170,6 @@ export default function Product() {
           }
         }
 
-        // if (storedArrays.some((item) => item.title === fetchedProduct.title)) {
-        //   if (storedArrays.some((item) => item.size === size)) {
-        //     storedArrays[index].quantity++;
-        //     return;
-        //   }
-        // }
-
         storedArrays.push({
           id: fetchedProduct._id,
           title: fetchedProduct.title,
@@ -201,40 +194,58 @@ export default function Product() {
       />
       {fetchedProduct !== null && (
         <div className="w-full">
-          <div className="py-14 flex flex-row w-full justify-around items-start gap-10 mx-auto">
-            <div className="w-1/2 flex flex-col md:flex-row items-start justify-end gap-2 relative">
-              <div className="flex flex-col gap-1  min-w-20">
+          <div className="py-14 flex flex-col md:flex-row w-full justify-around items-start md:gap-10 mx-auto">
+            <div className="w-full md:w-1/2 flex flex-col md:flex-row items-start justify-center gap-2 relative overflow-hidden">
+              <div className="hidden md:flex flex-col gap-1 max-w-15 ">
                 {fetchedProduct.images.map((image, index) => (
                   <img
                     src={image}
-                    className="w-20 hover:cursor-pointer"
+                    className=" hover:cursor-pointer"
                     alt=""
                     key={index}
                     onClick={handleImageClick}
                   />
                 ))}
               </div>
-              <img src={highlightedImage} className="" alt="" />
-              {productsPurchased && productsPurchased.includes(productID) && (
-                <p className="absolute right-0 top-4 bg-yellow-500 px-2 rotate-20 rounded-sm">
-                  Purchased
-                </p>
-              )}
-              {isProductReviewed && (
-                <p className="absolute left-0 top-4 bg-green-200 px-2 -rotate-20 rounded-sm">
-                  Reviewed
-                </p>
-              )}
+              <div className="w-full h-full">
+                <img src={highlightedImage} className="w-full h-full" alt="" />
+                {productsPurchased && productsPurchased.includes(productID) && (
+                  <p className="absolute right-0 top-4 bg-yellow-500 px-2 rotate-20 rounded-sm">
+                    Purchased
+                  </p>
+                )}
+                {isProductReviewed && (
+                  <p className="absolute left-0 top-4 bg-green-200 px-2 -rotate-20 rounded-sm">
+                    Reviewed
+                  </p>
+                )}
+              </div>
+              <div className="flex md:hidden flex-row gap-1 max-w-15">
+                {fetchedProduct.images.map((image, index) => (
+                  <img
+                    src={image}
+                    className=" hover:cursor-pointer"
+                    alt=""
+                    key={index}
+                    onClick={handleImageClick}
+                  />
+                ))}
+              </div>
             </div>
-            <div className="w-1/2 flex flex-col gap-3">
-              <h1 className="text-3xl font-bold">{fetchedProduct.title}</h1>
+
+            <div className="w-full md:w-1/2 flex flex-col gap-3">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">
+                {fetchedProduct.title}
+              </h1>
               <div className="flex items-center gap-2 text-sm">
                 <FiveStartFeedback rating={fetchedProduct.reviewsMedian} />
                 <p>({fetchedProduct.reviewsNumber})</p>
                 <p>{fetchedProduct.ordersNumber} orders</p>
               </div>
               <h3 className="text-3xl font-bold">${fetchedProduct.price}</h3>
-              <p className="text-slate-600">{fetchedProduct.description}</p>
+              <p className="text-slate-600 text-xs sm:text-sm md:text-base">
+                {fetchedProduct.description}
+              </p>
               <div className="flex flex-col">
                 <h4>Select Size</h4>
                 <ToggleGroup
@@ -342,7 +353,10 @@ export default function Product() {
                 Reviews ({fetchedReviews !== null && fetchedReviews.length})
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="description" className="border p-3">
+            <TabsContent
+              value="description"
+              className="border p-3 text-xs sm:text-sm md:text-base"
+            >
               An e-commerce website is an online platform that facilitates the
               buying and selling of products or services over the internet. It
               serves as a virtual marketplace where businesses and individuals

@@ -29,7 +29,7 @@ export default function RelatedProductsSection({ subCategory, category }) {
 
   return (
     <div className="flex flex-col py-24 items-center">
-      <h1 className="mb-4 relative text-2xl font-bold after:content-[''] after:absolute after:top-1/2 after:w-14 after:h-[2px] after:bg-black">
+      <h1 className="mb-4 relative text-xl md:text-2xl font-bold after:content-[''] after:absolute after:top-1/2 after:w-8 md:after:w-14 after:h-[2px] after:bg-black">
         <span className="text-slate-500">RELATED</span> PRODUCTS
       </h1>
       <div className="w-full flex flex-wrap items-start">

@@ -4,10 +4,10 @@ import LoadingSpinner from "./ui/LoadingSpinner";
 export default function BestSellersSection({ data }) {
   return (
     <div className="w-full flex flex-col gap-5 items-center">
-      <h1 className="relative text-2xl font-bold after:content-[''] after:absolute after:top-1/2 after:w-14 after:h-[2px] after:bg-black">
+      <h1 className="relative text-xl md:text-2xl font-bold after:content-[''] after:absolute after:top-1/2 after:w-8 md:after:w-14 after:h-[2px] after:bg-black">
         <span className="text-slate-500">BEST</span> SELLERS
       </h1>
-      <p className="text-center text-sm">
+      <p className="text-center text-xs md:text-sm">
         Lorem Ipsum is simply dummy text of the printing and typesetting
         industry. Lorem Ipsum has been the.
       </p>

@@ -7,16 +7,23 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { useContext, useEffect, useRef, useState } from "react";
-import { BadgeCheck, Headset, RefreshCcwDot } from "lucide-react";
+import {
+  BadgeCheck,
+  Headset,
+  RefreshCcwDot,
+  GalleryHorizontal,
+} from "lucide-react";
 import HighlightItem from "@/components/HighlightItem";
 import SubscribeSection from "@/components/SubscribeSection";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import UserContext from "@/context/UserContext";
+import { useNavigate } from "react-router";
 
 export default function Home() {
   const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
   const { fetchedLatest, fetchedBestSeller, error } = useContext(UserContext);
+  let navigate = useNavigate();
 
   if (error) {
     toast.error("An error has occured! Please refresh the page", {
@@ -32,10 +39,11 @@ export default function Home() {
         richColors
         visibleToasts={1}
       />
+
       {fetchedBestSeller !== null && (
         <Carousel
           plugins={[plugin.current]}
-          className="w-full md:w-3/4 max-h-3/4 relative border"
+          className="w-full  relative border"
           onMouseEnter={plugin.current.stop}
           onMouseLeave={plugin.current.reset}
         >
@@ -45,7 +53,7 @@ export default function Home() {
                 key={index}
                 className="h-full flex flex-col md:flex-row w-full items-center justify-between"
               >
-                <div className="w-full md:w-3/5 h-96 md:h-full flex flex-col items-center justify-center text-center py-5 px-2 md:py-1 md:px-1">
+                <div className="w-full md:w-3/5  md:h-full flex flex-col items-center justify-center text-center py-3 px-2 md:py-1 md:px-1">
                   <h1 className="italic font-bold text-center">
                     OUR BESTSELLERS
                   </h1>
@@ -53,14 +61,16 @@ export default function Home() {
                     {product.title}
                   </h1>
                   <h1 className="text-sm italic font-serif">
-                    Swip Left or right &lt;-&gt;
+                    Swip Left or right
                   </h1>
+                  <GalleryHorizontal />
                 </div>
-                <div className="h-full w-full md:w-2/5">
+                <div className="h-full w-full md:w-2/5 flex justify-center md:justify-end overflow-hidden">
                   <img
                     src={product.images[0]}
                     alt=""
-                    className="w-full h-full"
+                    className="h-full md:max-h-125 w-full md:w-fit hover:cursor-pointer hover:scale-110  overflow-hidden transition delay-150 duration-300 ease-in-out"
+                    onClick={() => navigate(`/product/${product._id}`)}
                   />
                 </div>
               </CarouselItem>
@@ -68,6 +78,7 @@ export default function Home() {
           </CarouselContent>
         </Carousel>
       )}
+
       <LatestCollectionSection data={fetchedLatest} />
       <BestSellersSection data={fetchedBestSeller} />
 

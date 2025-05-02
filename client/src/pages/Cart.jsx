@@ -41,7 +41,6 @@ export default function Cart() {
     if (position === undefined) return;
     const cartCopy = cartContent.filter((_, index) => index !== position * 1);
     setCartContent(cartCopy);
-    // const cartCopy = [...cartContent];
   };
 
   const handleCheckoutClick = () => {
@@ -74,6 +73,7 @@ export default function Cart() {
       );
     });
   }
+
   return (
     <div className="pt-18 flex flex-col gap-2">
       <Toaster
@@ -82,31 +82,34 @@ export default function Cart() {
         richColors
         visibleToasts={1}
       />
-      <h1 className="mb-4 relative text-2xl font-bold after:content-[''] after:absolute after:top-1/2 after:w-14 after:h-[2px] after:bg-black">
+      <h1 className="mb-4 relative text-xl md:text-2xl font-bold after:content-[''] after:absolute after:top-1/2 after:w-8 md:after:w-14 after:h-[2px] after:bg-black">
         <span className="text-slate-500">YOUR</span> CART
       </h1>
       <div>{cartContentItems}</div>
 
       {cartContent !== null && cartContent.length > 0 && (
         <div className="mt-15 w-full flex flex-col items-end ">
-          <div className="flex flex-col items-start w-1/2">
-            <h1 className="mr-14 relative text-2xl font-bold after:content-[''] after:absolute after:top-1/2 after:w-14 after:h-[2px] after:bg-black">
+          <div className="flex flex-col items-start w-2/3 md:w-1/2">
+            <h1 className="mr-14 relative text-xl md:text-2xl font-bold after:content-[''] after:absolute after:top-1/2 after:w-8 md:after:w-14 after:h-[2px] after:bg-black">
               <span className="text-slate-500">CART</span> TOTALS
             </h1>
-            <div className="flex flex-row w-full justify-between py-2">
+            <div className="flex flex-row w-full justify-between py-2 text-xs md:text-base">
               <h2>Subtotal</h2>
               <p>${subTotal}</p>
             </div>
-            <div className="flex flex-row w-full justify-between border-t border-b py-2">
+            <div className="flex flex-row w-full justify-between border-t border-b py-2 text-xs md:text-base">
               <h2>Shipping Fee</h2>
               <p>$10</p>
             </div>
-            <div className="flex flex-row w-full justify-between py-2 font-bold">
+            <div className="flex flex-row w-full justify-between py-2 font-bold text-xs md:text-base">
               <h2>Total</h2>
               <p>${subTotal + 10 * 1}</p>
             </div>
             <div className="w-full flex flex-col items-end pt-3">
-              <Button className="px-5 " onClick={handleCheckoutClick}>
+              <Button
+                className="px-2 md:px-5 text-xs md:text-base"
+                onClick={handleCheckoutClick}
+              >
                 PROCEED TO CHECKOUT
               </Button>
             </div>

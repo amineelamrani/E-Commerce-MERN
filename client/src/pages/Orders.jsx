@@ -182,25 +182,25 @@ export default function Orders() {
   // 6.2. redirect to success=true and give a notif to the user that the order is placed and wait for its delivery (delivery will be updated by the admin later) [when success true show that it is processed successfully and give an overview of the order placed or simply redirect him to orders route after showing the popup with a button that if clicked redirect him to orders route to check the status of their orders]
   return (
     <>
-      <div className="flex flex-col md:flex-row w-full py-15 gap-5 relative">
+      <div className="flex flex-col md:flex-row w-full py-8 md:py-15 gap-5 relative">
         {(paymentStripeSuccess || paymentCODSuccess) && (
           <div className="absolute w-full h-full z-50 gap-10 flex flex-col items-center justify-center bg-white/30 backdrop-blur-md">
-            <h1 className="text-3xl font-bold text-green-600">
+            <h1 className="text-xl md:text-3xl font-bold text-green-600">
               Payment Done successfully
             </h1>
-            <p>
+            <p className="text-xs md:text-base text-center">
               We will redirect you to the cart section to complete your shopping
             </p>
             <Check
               color="#ffffff"
               size={30}
-              className="bg-green-600 w-35 h-35 flex items-center justify-center rounded-full"
+              className="bg-green-600 w-10 h-10 md:w-35 md:h-35 flex items-center justify-center rounded-full"
             />
-            <LoadingSpinner className=" h-8 w-8 mx-auto" />
+            <LoadingSpinner className="h-8 w-8 mx-auto" />
           </div>
         )}
-        <div className="w-1/2">
-          <h1 className="mb-4 relative text-2xl font-bold after:content-[''] after:absolute after:top-1/2 after:w-14 after:h-[2px] after:bg-black">
+        <div className="w-full md:w-1/2">
+          <h1 className="mb-4 relative text-xl md:text-2xl font-bold after:content-[''] after:absolute after:top-1/2 after:w-8 md:after:w-14 after:h-[2px] after:bg-black">
             <span className="text-slate-500">DELIVERY</span> INFORMATION
           </h1>
           <form
@@ -300,8 +300,8 @@ export default function Orders() {
           </form>
         </div>
 
-        <div className="flex flex-col items-start w-1/2">
-          <h1 className="mb-4 relative text-2xl font-bold after:content-[''] after:absolute after:top-1/2 after:w-14 after:h-[2px] after:bg-black">
+        <div className="flex flex-col items-start w-full md:w-1/2 text-xs md:text-base">
+          <h1 className="mb-4 relative text-xl md:text-2xl font-bold after:content-[''] after:absolute after:top-1/2 after:w-8 md:after:w-14 after:h-[2px] after:bg-black">
             <span className="text-slate-500">CART</span> TOTALS
           </h1>
           <div className="flex flex-row w-full justify-between py-2">
@@ -317,7 +317,7 @@ export default function Orders() {
             <p>${total}</p>
           </div>
           <div className="my-5 w-full">
-            <h1 className="mb-4 relative text-2xl font-bold after:content-[''] after:absolute after:top-1/2 after:w-14 after:h-[2px] after:bg-black">
+            <h1 className="mb-4 relative text-xl md:text-2xl font-bold after:content-[''] after:absolute after:top-1/2 after:w-8 md:after:w-14 after:h-[2px] after:bg-black">
               <span className="text-slate-500">PAYMENT</span> METHOD
             </h1>
             <ToggleGroup

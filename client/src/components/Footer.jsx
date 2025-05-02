@@ -12,11 +12,11 @@ const footerSections = [
     links: [
       {
         title: "About us",
-        href: "#",
+        href: "/about",
       },
       {
         title: "Home",
-        href: "#",
+        href: "/",
       },
       {
         title: "Delivery",
@@ -36,7 +36,7 @@ const footerSections = [
         href: "#",
       },
       {
-        title: "https://github.com/amineelamrani",
+        title: "GITHUB",
         href: "https://github.com/amineelamrani",
       },
     ],
@@ -48,12 +48,12 @@ const Footer01Page = () => {
     <div className="flex flex-col pt-10 w-full">
       <footer>
         <div className="w-full">
-          <div className="py-5 flex flex-col lg:flex-row items-start justify-between gap-5">
+          <div className="py-5 flex flex-col lg:flex-row items-start justify-between gap-2 md:gap-5">
             <div className="w-full lg:w-1/2">
               {/* Logo */}
-              <h1 className="text-3xl">FOREVER.</h1>
+              <h1 className="text-xl md:text-3xl">FOREVER.</h1>
 
-              <p className="mt-4 text-muted-foreground text-sm w-full max-w-full lg:max-w-96">
+              <p className="mt-2 md:mt-4 text-muted-foreground text-xs md:text-sm w-full max-w-full lg:max-w-96">
                 Lorem Ipsum is simply dummy text of the printing and typesetting
                 industry. Lorem Ipsum has been the industry's standard dummy
                 text ever since the 1500s, when an unknown printer took a galley
@@ -63,7 +63,9 @@ const Footer01Page = () => {
             <div className="w-full lg:w-2/5 flex justify-start lg:justify-between gap-10 lg:gap-0">
               {footerSections.map(({ title, links }) => (
                 <div key={title}>
-                  <h6 className="font-semibold text-xl pb-5">{title}</h6>
+                  <h6 className="font-semibold text-base md:text-xl pb-1 md:pb-5">
+                    {title}
+                  </h6>
                   <ul className="">
                     {links.map(({ title, href }) => (
                       <li key={title}>
@@ -82,7 +84,7 @@ const Footer01Page = () => {
           </div>
 
           <Separator />
-          <div className="py-3 flex flex-col-reverse items-center justify-center ">
+          <div className="py-3 flex flex-col-reverse items-center justify-center text-sm md:text-base">
             {/* Copyright */}
             <span className="text-muted-foreground">
               Copyright &copy; {new Date().getFullYear()}{" "}

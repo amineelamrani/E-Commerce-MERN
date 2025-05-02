@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router";
 import cartIcon from "../assets/icons/cart-icon.svg";
 import { Button } from "@/components/ui/buttonHeader";
-import { UserRound, Search } from "lucide-react";
+import { UserRound, Search, Menu } from "lucide-react";
 
 import {
   NavigationMenu,
@@ -119,6 +119,11 @@ export default function Header() {
                     Logout
                   </NavigationMenuLink>
                 )}
+                {currentUser === null && (
+                  <NavigationMenuLink onClick={() => navigate("/login")}>
+                    Login
+                  </NavigationMenuLink>
+                )}
               </NavigationMenuContent>
             </NavigationMenuItem>
           </NavigationMenuList>
@@ -134,6 +139,30 @@ export default function Header() {
             <img src={cartIcon} className="h-6 w-6" alt="" />
           </div>
         </Link>
+        <NavigationMenu className="flex md:hidden" orientation="vertical">
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>
+                <Menu className="h-6 w-6 hover:scale-110" />
+              </NavigationMenuTrigger>
+
+              <NavigationMenuContent>
+                <NavigationMenuLink onClick={() => navigate("/")}>
+                  HOME
+                </NavigationMenuLink>
+                <NavigationMenuLink onClick={() => navigate("/collection")}>
+                  COLLECTION
+                </NavigationMenuLink>
+                <NavigationMenuLink onClick={() => navigate("/about")}>
+                  ABOUT
+                </NavigationMenuLink>
+                <NavigationMenuLink onClick={() => navigate("/contact")}>
+                  CONTACT
+                </NavigationMenuLink>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
       </div>
     </div>
   );

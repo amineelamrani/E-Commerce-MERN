@@ -17,11 +17,11 @@ export default function Purchases() {
   // for the orders in the currentUser state => search for them and display their status for the user
   return (
     <div className="pt-10 flex flex-col gap-2">
-      <h1 className="mr-14 relative text-2xl font-bold after:content-[''] after:absolute after:top-1/2 after:w-14 after:h-[2px] after:bg-black">
+      <h1 className="mr-14 relative text-xl md:text-2xl font-bold after:content-[''] after:absolute after:top-1/2 after:w-8 md:after:w-14 after:h-[2px] after:bg-black">
         <span className="text-slate-500">YOUR</span> PURCHASES
       </h1>
-      <Table>
-        <TableCaption>Table of all of your orders that you made</TableCaption>
+      <Table className="text-xs md:text-base">
+        <TableCaption>Table of all of your purchases</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead> </TableHead>

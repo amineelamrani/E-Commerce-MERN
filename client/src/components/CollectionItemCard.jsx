@@ -9,7 +9,7 @@ export default function CollectionItemCard({ title, price, image, id }) {
             <img
               src={image}
               alt=""
-              className="w-full hover:cursor-pointer hover:scale-110 transition-transform duration-200"
+              className="w-full hover:cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out"
             />
           </Link>
         </div>
