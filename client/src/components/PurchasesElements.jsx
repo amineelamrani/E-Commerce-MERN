@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { TableCell, TableRow } from "./ui/table";
 import { Badge } from "@/components/ui/badge";
 
-export default function PurchasesElements({ orderID, index }) {
+export default function PurchasesElements({
+  orderID,
+  index,
+  setOrderHighlights,
+}) {
   const [orderInfos, setOrderInfos] = useState(null);
-
   useEffect(() => {
     const fetchOder = async () => {
-      const res = await fetch(`/api/v1/users/order/${orderID}`, {
+      const res = await fetch(`/api/v1/users/current/order/${orderID}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -27,7 +30,10 @@ export default function PurchasesElements({ orderID, index }) {
   return (
     <>
       {orderInfos && (
-        <TableRow>
+        <TableRow
+          className="hover:font-bold hover:cursor-pointer"
+          onClick={() => setOrderHighlights({ ...orderInfos })}
+        >
           <TableCell>{index + 1}</TableCell>
           <TableCell>#{orderID}</TableCell>
           <TableCell>

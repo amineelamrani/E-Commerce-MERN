@@ -207,7 +207,7 @@ export default function Product() {
                   />
                 ))}
               </div>
-              <div className="w-full h-full">
+              <div className="w-full h-full relative">
                 <img src={highlightedImage} className="w-full h-full" alt="" />
                 {productsPurchased && productsPurchased.includes(productID) && (
                   <p className="absolute right-0 top-4 bg-yellow-500 px-2 rotate-20 rounded-sm">

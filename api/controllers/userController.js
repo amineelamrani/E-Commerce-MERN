@@ -176,6 +176,15 @@ exports.viewOrder = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.viewCurrentUserOrder = catchAsync(async (req, res, next) => {
+  const { orderId } = req.params;
+  const order = await Order.findById(orderId).populate("products.productID");
+  res.status(202).json({
+    status: "success",
+    result: order,
+  });
+});
+
 exports.getAuthenticatedUser = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.userId).select(
     "-password -uniqueString -confirmPassword"

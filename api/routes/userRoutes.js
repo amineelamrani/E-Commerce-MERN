@@ -18,6 +18,7 @@ router.post("/resetPassword/:email/:token", authController.resetPassword);
 router.use(authController.protect);
 router.get("/current", userController.getAuthenticatedUser);
 router.get("/order/:orderId", userController.viewOrder);
+router.get("/current/order/:orderId", userController.viewCurrentUserOrder);
 router.post("/buy", userController.orderProduct);
 router.post("/buy/stripe/success", userController.orderProductStripeSuccess);
 router.post("/favourites/add/:productID", favouriteController.addFavourite);

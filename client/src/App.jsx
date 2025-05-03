@@ -26,7 +26,7 @@ function AppContent() {
   const hideFooter = location.pathname.startsWith("/admin");
 
   return (
-    <div className="container mx-auto px-5 py-2 font-mono">
+    <div className="container mx-auto px-5 py-2 font-mono relative w-full">
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
