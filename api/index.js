@@ -30,6 +30,11 @@ app.use(express.json());
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/products", productRouter);
 
+app.get(/(.*)/, (req, res) => {
+  // res.sendFile(path.join(__dirname, "./../client/dist/index.html"));
+  res.sendFile(path.join(__dirname, "../client", "dist", "index.html"));
+});
+
 // Start Server
 const port = process.env.PORT;
 const server = app.listen(port, () => {
