@@ -29,6 +29,11 @@ export default function Cart() {
     setBasket((basket) => !basket);
   }, [cartContent]);
 
+  useEffect(() => {
+    document.title =
+      "My Cart | FOREVER Store | The best store with the best quality price ration";
+  }, []);
+
   const handleChange = (e, position) => {
     // need to update the content in the localStorage after clicking on the increase quantity input field
     const cartCopy = [...cartContent];

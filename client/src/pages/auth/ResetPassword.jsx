@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,6 +12,11 @@ export default function ResetPassword() {
   });
   let { mail } = useParams();
   let navigate = useNavigate();
+
+  useEffect(() => {
+    document.title =
+      "Reset Password | FOREVER Store | The best store with the best quality price ration";
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

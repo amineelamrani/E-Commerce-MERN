@@ -1,6 +1,6 @@
 import PurchasesElements from "@/components/PurchasesElements";
 import UserContext from "@/context/UserContext";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -19,53 +19,59 @@ export default function Purchases() {
   const [orderHighlights, setOrderHighlights] = useState(null);
 
   let navigate = useNavigate();
+  useEffect(() => {
+    document.title =
+      "My Purchases | FOREVER Store | The best store with the best quality price ration";
+  }, []);
 
   // for the orders in the currentUser state => search for them and display their status for the user
   return (
     <div className="pt-10 flex flex-col w-full gap-2">
       {orderHighlights !== null && (
         <div className="absolute w-full h-full z-50 gap-2 flex flex-col items-center justify-center bg-white/30 backdrop-blur-md px-2 md:px-15">
-          <h1 className="text-center text-base md:text-3xl font-bold">
-            Your Order {orderHighlights._id} Infos
-          </h1>
-          <h2 className="text-base md:text-xl">Products Requested</h2>
-          {orderHighlights.products.map((item, index) => (
-            <div
-              className="flex w-full gap-2 hover:cursor-pointer hover:bg-gray-100 bg-transparent transition duration-400 ease-in-out"
-              key={`product-key-${index}`}
-              onClick={() => {
-                setOrderHighlights(null);
-                navigate(`/product/${item.productID._id}`);
-              }}
-            >
-              <img
-                src={item.productID.images[0]}
-                alt=""
-                className="w-10 h-13 md:w-15 md:h-18 hover:cursor-pointer hover:scale-110 transition duration-200 ease-in-out"
+          <div className="w-full">
+            <h1 className="text-center text-base md:text-3xl font-bold">
+              Your Order {orderHighlights._id} Infos
+            </h1>
+            <h2 className="text-base md:text-xl">Products Requested</h2>
+            {orderHighlights.products.map((item, index) => (
+              <div
+                className="flex w-full gap-2 hover:cursor-pointer hover:bg-gray-100 bg-transparent transition duration-400 ease-in-out"
+                key={`product-key-${index}`}
                 onClick={() => {
                   setOrderHighlights(null);
                   navigate(`/product/${item.productID._id}`);
                 }}
-              />
-              <div className="text-xs md:text-base">
-                <h1
-                  className="font-bold"
+              >
+                <img
+                  src={item.productID.images[0]}
+                  alt=""
+                  className="w-10 h-13 md:w-15 md:h-18 hover:cursor-pointer hover:scale-110 transition duration-200 ease-in-out"
                   onClick={() => {
                     setOrderHighlights(null);
                     navigate(`/product/${item.productID._id}`);
                   }}
-                >
-                  {item.productID.title}
-                </h1>
-                <p>
-                  {item.size} x {item.quantity} | Price : $
-                  {item.productID.price * item.quantity}
-                </p>
+                />
+                <div className="text-xs md:text-base">
+                  <h1
+                    className="font-bold"
+                    onClick={() => {
+                      setOrderHighlights(null);
+                      navigate(`/product/${item.productID._id}`);
+                    }}
+                  >
+                    {item.productID.title}
+                  </h1>
+                  <p>
+                    {item.size} x {item.quantity} | Price : $
+                    {item.productID.price * item.quantity}
+                  </p>
+                </div>
               </div>
+            ))}
+            <div className="w-full flex justify-end py-5 px-10">
+              <Button onClick={() => setOrderHighlights(null)}>Close</Button>
             </div>
-          ))}
-          <div className="w-full flex justify-end py-5">
-            <Button onClick={() => setOrderHighlights(null)}>Close</Button>
           </div>
         </div>
       )}

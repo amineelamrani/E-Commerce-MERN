@@ -87,6 +87,11 @@ export default function Orders() {
   }, [paymentCODSuccess]);
 
   useEffect(() => {
+    document.title =
+      "My Orders | FOREVER Store | The best store with the best quality price ration";
+  }, []);
+
+  useEffect(() => {
     // Check to see if this is a redirect back from Checkout
     const query = new URLSearchParams(window.location.search);
 

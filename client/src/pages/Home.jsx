@@ -25,6 +25,11 @@ export default function Home() {
   const { fetchedLatest, fetchedBestSeller, error } = useContext(UserContext);
   let navigate = useNavigate();
 
+  useEffect(() => {
+    document.title =
+      "Home | FOREVER Store | The best store with the best quality price ration";
+  }, []);
+
   if (error) {
     toast.error("An error has occured! Please refresh the page", {
       duration: 3000,

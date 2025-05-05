@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,6 +13,10 @@ export default function ForgotPassword() {
     // check data before sending the request to the server : password is the same as confirmPassword
     await signUpFetch();
   };
+  useEffect(() => {
+    document.title =
+      "Forgot Password | FOREVER Store | The best store with the best quality price ration";
+  }, []);
 
   const signUpFetch = async () => {
     const res = await fetch("/api/v1/users/forgetPassword", {

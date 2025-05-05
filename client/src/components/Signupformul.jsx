@@ -76,7 +76,7 @@ export function Signupformul({ className, ...props }) {
               <div className="grid gap-3">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <p className="ml-auto inline-block text-sm underline-offset-4 hover:underline">
+                  <p className="ml-auto inline-block text-xs md:text-sm underline-offset-4 hover:underline">
                     <Link to="/forgot-password">Forgot your password?</Link>
                   </p>
                 </div>

@@ -4,7 +4,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 export default function AccountVerification() {
@@ -12,6 +12,11 @@ export default function AccountVerification() {
   let { mail } = useParams();
   const [loading, setLoading] = useState(false);
   let navigate = useNavigate();
+
+  useEffect(() => {
+    document.title =
+      "Verify Account | FOREVER Store | The best store with the best quality price ration";
+  }, []);
 
   const verifyAccountFetch = async (val) => {
     const res = await fetch(

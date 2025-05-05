@@ -1,6 +1,12 @@
+import { useEffect } from "react";
 import aboutUs from "../assets/about_img-BAJyTXw9.png";
 
 export default function About() {
+  useEffect(() => {
+    document.title =
+      "About US | FOREVER Store | The best store with the best quality price ration";
+  }, []);
+
   return (
     <div className="py-15 flex flex-col gap-7">
       <h1 className="mb-4 text-center relative text-xl md:text-2xl font-bold after:content-[''] after:absolute after:top-1/2 after:w-8 md:after:w-14 after:h-[2px] after:bg-black">

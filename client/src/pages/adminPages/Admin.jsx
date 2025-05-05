@@ -1,7 +1,7 @@
 import AddingProduct from "@/components/utils/adminComponents/AddingProduct";
 import ViewingOrders from "@/components/utils/adminComponents/ViewingOrders";
 import ViewingProducts from "@/components/utils/adminComponents/ViewingProducts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Admin() {
   const [tabSelected, setTabSelected] = useState("adding"); //values : adding, update, orders
@@ -18,6 +18,11 @@ export default function Admin() {
   const handleSelectClick = (e) => {
     setTabSelected(e.target.id);
   };
+
+  useEffect(() => {
+    document.title =
+      "Admin | FOREVER Store | The best store with the best quality price ration";
+  }, []);
 
   return (
     <div className="flex flex-col md:flex-row relative">

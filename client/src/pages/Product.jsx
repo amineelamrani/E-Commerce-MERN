@@ -57,6 +57,11 @@ export default function Product() {
   }, [productID, isProductReviewed]);
 
   useEffect(() => {
+    document.title =
+      "Product | FOREVER Store | The best store with the best quality price ration";
+  }, []);
+
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, [productID]);
 

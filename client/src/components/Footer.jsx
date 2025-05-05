@@ -71,6 +71,7 @@ const Footer01Page = () => {
                       <li key={title}>
                         <a
                           href={href}
+                          target="_blank"
                           className="text-muted-foreground hover:text-foreground text-sm"
                         >
                           {title}

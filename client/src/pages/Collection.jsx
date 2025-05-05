@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import UserContext from "@/context/UserContext";
 import { Search } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 
 export default function Collection() {
@@ -33,6 +33,12 @@ export default function Collection() {
     Bottomwear: true,
     Winterwear: true,
   });
+
+  useEffect(() => {
+    document.title =
+      "Search... | FOREVER Store | The best store with the best quality price ration";
+  }, []);
+
   let sortedProducts = fetchedProducts !== null ? [...fetchedProducts] : null;
   let searchCardsContent = (
     <LoadingSpinner className="my-5 h-14 w-14 mx-auto" />
