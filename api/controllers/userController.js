@@ -7,7 +7,7 @@ const express = require("express");
 const app = express();
 app.use(express.static("public"));
 
-const YOUR_DOMAIN = "http://localhost:5173/orders";
+const YOUR_DOMAIN = process.env.REDIRECTING_URL;
 
 exports.getUsers = catchAsync(async (req, res, next) => {
   const users = await User.find();
