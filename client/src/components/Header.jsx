@@ -41,6 +41,7 @@ export default function Header() {
     const data = await res.json();
     if (data && data.status === "success") {
       setNewLogin((st) => !st);
+      navigate("/login");
     }
   };
 

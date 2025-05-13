@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link, useNavigate } from "react-router";
 import { useState } from "react";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 
 export function Signupformul({ className, ...props }) {
   const [inputData, setInputData] = useState({
@@ -13,6 +15,12 @@ export function Signupformul({ className, ...props }) {
     password: "",
     confirmPassword: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState({
+    error: false,
+    message: "",
+  });
+
   let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -22,6 +30,11 @@ export function Signupformul({ className, ...props }) {
   };
 
   const signUpFetch = async () => {
+    setIsLoading(true);
+    setError({
+      error: false,
+      message: "",
+    });
     const res = await fetch("/api/v1/users/signup", {
       method: "POST",
       headers: {
@@ -32,12 +45,32 @@ export function Signupformul({ className, ...props }) {
     const data = await res.json();
     if (data && data.status === "success") {
       // redirect to /verify-account route to verify the account creation
+      setIsLoading(false);
+      setError({
+        error: false,
+        message: "",
+      });
       navigate(`/verify-account/${inputData.email}`);
+    } else {
+      setIsLoading(false);
+      setError({
+        error: true,
+        message: "Cannot create the account try again...",
+      });
+      toast.error("Error while creating the account please try again!", {
+        duration: 3000,
+      });
     }
   };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
+      <Toaster
+        position="top-right"
+        expand={true}
+        richColors
+        visibleToasts={1}
+      />
       <Card>
         <h1 className="relative font-serif italic text-2xl after:content-[''] after:absolute after:top-1/2 after:w-14 after:h-[2px] after:bg-black mx-auto">
           Sign Up
@@ -110,8 +143,12 @@ export function Signupformul({ className, ...props }) {
               </div>
 
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full">
-                  Sign Up
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={isLoading ? true : false}
+                >
+                  {isLoading ? "Loading..." : "Sign Up"}
                 </Button>
               </div>
             </div>
