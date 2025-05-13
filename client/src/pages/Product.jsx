@@ -100,7 +100,7 @@ export default function Product() {
     };
 
     fetchReviewsData();
-  }, [isProductReviewed]);
+  }, [isProductReviewed, productID]);
 
   const handleImageClick = (e) => {
     setHighlightedImage(e.target.currentSrc);
